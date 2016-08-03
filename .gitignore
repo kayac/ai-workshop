@@ -29,3 +29,6 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+Assets/TakashiCompany*
+unity-tools.sh
