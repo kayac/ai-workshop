@@ -15,11 +15,10 @@ public class GameMapGeneratorRandom : GameMapGeneratorBase
 				switch (r)
 				{
 					case 0:
-					case 1:
 						cellType = GameMapCell.CellType.Wall;
 						break;
 
-					case 2:
+					case 1:
 						cellType = GameMapCell.CellType.River;
 						break;
 				}

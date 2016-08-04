@@ -19,8 +19,16 @@ public class GameStage : MonoBehaviour
 
 	private Vector2 cellSize { get { return _cellSize; } }
 
-
 	public GameMapCell[,] map { get; private set ; }
+
+	[SerializeField]
+	private GameObject _groundPrefab;
+
+	[SerializeField]
+	private GameObject _wallPrefab;
+
+	[SerializeField]
+	private GameObject _riverPrefab;
 
 	void Awake()
 	{
@@ -36,8 +44,27 @@ public class GameStage : MonoBehaviour
 		{
 			for (int y = 0; y < _sizeY; y++)
 			{
-				Debug.Log(map[x,y]);
+				var cell = map[x, y];
+				
+				GameObject prefab = null;
+
+				switch (cell.contentType)
+				{
+					case GameMapCell.CellType.None: prefab = _groundPrefab; break;
+					case GameMapCell.CellType.Wall: prefab = _wallPrefab; break;
+					case GameMapCell.CellType.River: prefab = _riverPrefab; break;
+				}
+
+				var go = (GameObject)Instantiate(prefab);
+
+				go.transform.position = new Vector3(
+					Const.cellSizeX * x, Const.cellSizeY * y, 0
+				);
+
+				go.transform.parent = this.transform;
 			}
 		}
+
+		
 	}
 }
