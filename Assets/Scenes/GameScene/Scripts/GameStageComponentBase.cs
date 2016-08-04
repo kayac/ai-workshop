@@ -3,7 +3,6 @@ using System.Collections;
 
 public abstract class GameStageComponentBase : MonoBehaviour
 {
-
 	private GameStage _stageInternal;
 
 	protected GameStage _stage
