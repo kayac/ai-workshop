@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using DG.Tweening;
 
 [RequireComponent(typeof(Rigidbody))]
 public class GameCharacter : MonoBehaviour
@@ -37,5 +39,21 @@ public class GameCharacter : MonoBehaviour
 	public void MoveRight()
 	{
 		Move(Vector3.right * _speed * Time.fixedDeltaTime);
+	}
+
+	public void MoveTo(Vector3 position, Action onComplete = null)
+	{
+		_rigidbody.DOMove(position, _speed, true)
+		.SetSpeedBased(true)
+		.SetEase(Ease.Linear)
+		.OnComplete(
+			() =>
+			{
+				if (onComplete != null)
+				{
+					onComplete();
+				}
+			}
+		);
 	}
 }
