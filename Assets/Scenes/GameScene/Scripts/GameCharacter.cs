@@ -14,26 +14,28 @@ public class GameCharacter : MonoBehaviour
 		_rigidbody = GetComponent<Rigidbody>();
 	}
 
-	void FixedUpdate()
+	public void Move(Vector3 direction)
 	{
-		if (Input.GetKey(KeyCode.LeftArrow))
-		{
-			_rigidbody.MovePosition((Vector2)transform.position + Vector2.left * Time.fixedDeltaTime * _speed);
-		}
+		_rigidbody.MovePosition(transform.position + direction);
+	}
 
-		if (Input.GetKey(KeyCode.RightArrow))
-		{
-			_rigidbody.MovePosition((Vector2)transform.position + Vector2.right * Time.fixedDeltaTime * _speed);
-		}
+	public void MoveUp()
+	{
+		Move(Vector3.up * _speed * Time.fixedDeltaTime);
+	}
 
-		if (Input.GetKey(KeyCode.UpArrow))
-		{
-			_rigidbody.MovePosition((Vector2)transform.position + Vector2.up * Time.fixedDeltaTime * _speed);
-		}
+	public void MoveDown()
+	{
+		Move(Vector3.down * _speed * Time.fixedDeltaTime);
+	}
 
-		if (Input.GetKey(KeyCode.DownArrow))
-		{
-			_rigidbody.MovePosition((Vector2)transform.position + Vector2.down * Time.fixedDeltaTime * _speed);
-		}
+	public void MoveLeft()
+	{
+		Move(Vector3.left * _speed * Time.fixedDeltaTime);
+	}
+
+	public void MoveRight()
+	{
+		Move(Vector3.right * _speed * Time.fixedDeltaTime);
 	}
 }
