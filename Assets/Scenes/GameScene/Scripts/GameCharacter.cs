@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(Rigidbody))]
 public class GameCharacter : MonoBehaviour
 {
 	[SerializeField]
 	private float _speed;
 
-	private Rigidbody2D _rigidbody;
+	private Rigidbody _rigidbody;
 
 	void Awake()
 	{
-		_rigidbody = GetComponent<Rigidbody2D>();
+		_rigidbody = GetComponent<Rigidbody>();
 	}
 
 	void FixedUpdate()

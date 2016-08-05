@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 429282}
   - 212: {fileID: 21214274}
   - 114: {fileID: 11433024}
-  - 61: {fileID: 6177986}
+  - 65: {fileID: 6560822}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -31,20 +31,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!61 &6177986
-BoxCollider2D:
+--- !u!65 &6560822
+BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 166882}
-  m_Enabled: 1
-  m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
+  m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11433024
 MonoBehaviour:
   m_ObjectHideFlags: 1
