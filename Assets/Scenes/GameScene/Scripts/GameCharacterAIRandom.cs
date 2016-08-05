@@ -40,7 +40,7 @@ public class GameCharacterAIRandom : GameCharacterAIBase
 
 			while(!isComplete)
 			{
-				yield return null;
+				yield return new WaitForEndOfFrame();
 			}
 			count++;
 		}
