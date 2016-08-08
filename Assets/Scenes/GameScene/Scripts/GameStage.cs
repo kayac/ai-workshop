@@ -22,6 +22,15 @@ public class GameStage : MonoBehaviour
 	public GameMapCell[,] map { get; private set ; }
 
 	[SerializeField]
+	private Transform _cameraRoot;
+
+	[SerializeField]
+	private GameObject _characterOwnPrefab;
+
+	[SerializeField]
+	private GameObject _characterOppPrefab;
+
+	[SerializeField]
 	private GameObject _groundPrefab;
 
 	[SerializeField]
@@ -30,9 +39,23 @@ public class GameStage : MonoBehaviour
 	[SerializeField]
 	private GameObject _riverPrefab;
 
+	[SerializeField]
+	private GameObject _foodPrefab;
+
+	private GameCharacter _playerCharacter;
+
 	void Awake()
 	{
 		InitMap();
+		InitPlayerCharacter();
+	}
+
+	void Update()
+	{
+		if (_playerCharacter != null)
+		{
+			_cameraRoot.position = _playerCharacter.transform.position;
+		}
 	}
 
 	void InitMap()
@@ -57,14 +80,48 @@ public class GameStage : MonoBehaviour
 
 				var go = (GameObject)Instantiate(prefab);
 
-				go.transform.position = new Vector3(
-					Const.cellSizeX * x, Const.cellSizeY * y, 0
-				);
+				var pos = new Vector3(Const.cellSizeX * x, Const.cellSizeY * y, Const.mapPositionZ);
 
+				go.transform.position = pos;
+				
 				go.transform.parent = this.transform;
+
+				if (cell.hasFood)
+				{
+					SetFood(x, y);
+				}
 			}
 		}
 
+	}
+
+	void InitPlayerCharacter()
+	{
+		_playerCharacter = GeneratePlayer(0, 0, Const.Side.Own);
+		_playerCharacter.gameObject.AddComponent<GameCharacterController>();
+	}
+
+	public GameCharacter GeneratePlayer(int x, int y, Const.Side side)
+	{
+		var prefab = side == Const.Side.Own ? _characterOwnPrefab : _characterOppPrefab;
+
+		var go = (GameObject)Instantiate(prefab);
+		var character = go.GetComponent<GameCharacter>();
+
+		character.transform.position = new Vector3(
+			Const.cellSizeX * x, Const.cellSizeY * y, Const.characterPositionZ);
 		
+		character.SetUp(side);
+
+		return character;
+	}
+
+	public void SetFood(int x, int y)
+	{
+		var go = (GameObject)Instantiate(_foodPrefab);
+
+		go.transform.position = new Vector3(Const.cellSizeX * x, Const.cellSizeZ * y, Const.foodPositionZ);
+
+		go.transform.parent = transform;
 	}
 }

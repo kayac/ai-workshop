@@ -307,6 +307,7 @@ MonoBehaviour:
   _groundPrefab: {fileID: 166882, guid: 1b1d28610ee9941d7801a679cb6f4776, type: 2}
   _wallPrefab: {fileID: 166882, guid: 25fe004508120421980a3c3ee32806b6, type: 2}
   _riverPrefab: {fileID: 166882, guid: 8c8aca9352a7f409397804ab73f99a1b, type: 2}
+  _foodPrefab: {fileID: 141778, guid: cd7a1e679d5cf4568a19d96e5d22d421, type: 2}
 --- !u!4 &1530715840
 Transform:
   m_ObjectHideFlags: 0

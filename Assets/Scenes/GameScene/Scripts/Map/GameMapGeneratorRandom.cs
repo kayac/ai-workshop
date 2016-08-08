@@ -12,6 +12,7 @@ public class GameMapGeneratorRandom : GameMapGeneratorBase
 			{
 				var r = Random.Range(0, 10);
 				var cellType = GameMapCell.CellType.None;
+				var hasFood = false;
 				switch (r)
 				{
 					case 0:
@@ -22,8 +23,17 @@ public class GameMapGeneratorRandom : GameMapGeneratorBase
 						cellType = GameMapCell.CellType.River;
 						break;
 				}
+				
+				if (cellType == GameMapCell.CellType.None)
+				{
+					var f = Random.Range(0, 5);
+					if (f == 0)
+					{
+						hasFood = true;
+					}
+				}
 
-				var cell = new GameMapCell(x, y, cellType);
+				var cell = new GameMapCell(x, y, cellType, hasFood);
 				map[x, y] = cell;
 			}
 		}
