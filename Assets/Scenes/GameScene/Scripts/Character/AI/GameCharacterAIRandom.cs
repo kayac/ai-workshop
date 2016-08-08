@@ -5,7 +5,7 @@ public class GameCharacterAIRandom : GameCharacterAIBase
 {
 	void Start()
 	{
-		//StartProcess();
+		StartProcess();
 	}
 
 	[ContextMenu("process")]

@@ -48,6 +48,7 @@ public class GameStage : MonoBehaviour
 	{
 		InitMap();
 		InitPlayerCharacter();
+		InitOtherCharacter();
 	}
 
 	void Update()
@@ -97,11 +98,28 @@ public class GameStage : MonoBehaviour
 
 	void InitPlayerCharacter()
 	{
-		_playerCharacter = GeneratePlayer(0, 0, Const.Side.Own);
+		_playerCharacter = GenerateCharacter(0, 0, Const.Side.Own);
 		_playerCharacter.gameObject.AddComponent<GameCharacterController>();
 	}
 
-	public GameCharacter GeneratePlayer(int x, int y, Const.Side side)
+	void InitOtherCharacter()
+	{
+		int count = 20;
+
+		for(int i = 0; i < count; i++)
+		{
+			var side = count / 2 < i ? Const.Side.Own : Const.Side.Opp;
+
+			var x = Random.Range(0, _sizeX);
+			var y = Random.Range(0, _sizeY);
+
+			var character = GenerateCharacter(x, y, side);
+
+			character.gameObject.AddComponent<GameCharacterAIRandom>();
+		}
+	}
+
+	public GameCharacter GenerateCharacter(int x, int y, Const.Side side)
 	{
 		var prefab = side == Const.Side.Own ? _characterOwnPrefab : _characterOppPrefab;
 
