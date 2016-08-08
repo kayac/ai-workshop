@@ -16,8 +16,7 @@ public class GameCharacterAIRandom : GameCharacterAIBase
 
 	private IEnumerator CoRandom()
 	{
-		var count = 0;
-		while (count < 3)
+		while (enabled)
 		{
 			var isComplete = false;
 
@@ -42,7 +41,6 @@ public class GameCharacterAIRandom : GameCharacterAIBase
 			{
 				yield return new WaitForEndOfFrame();
 			}
-			count++;
 		}
 	}
 }

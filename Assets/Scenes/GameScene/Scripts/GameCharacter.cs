@@ -43,6 +43,7 @@ public class GameCharacter : MonoBehaviour
 
 	public void MoveTo(Vector3 position, Action onComplete = null)
 	{
+		Debug.Log("pos:" + position.x + " ," + position.y);
 		var distance = Vector3.Distance(position, this.transform.position);
 		var duration = distance / _speed;
 		_rigidbody.DOMove(position, duration, false)
