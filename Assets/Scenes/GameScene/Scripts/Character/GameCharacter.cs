@@ -3,17 +3,36 @@ using System;
 using System.Collections;
 using DG.Tweening;
 
+/// <summary>
+/// キャラクター
+/// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class GameCharacter : MonoBehaviour
 {
+	/// <summary>
+	/// 移動速度(毎秒あたり)
+	/// </summary>
 	[SerializeField]
 	private float _speed;
 	
 	private Rigidbody _rigidbody;
 
+	/// <summary>
+	/// 現在のレベル
+	/// </summary>
+	/// <returns></returns>
 	public int level { get; private set; } 
+
+	/// <summary>
+	/// 現在の経験値
+	/// </summary>
+	/// <returns></returns>
 	public int exp { get; private set; }
 
+	/// <summary>
+	/// 味方/敵の判別
+	/// </summary>
+	/// <returns></returns>
 	public Const.Side side { get; private set; }
 
 	private TextMesh _text;
