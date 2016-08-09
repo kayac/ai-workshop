@@ -204,12 +204,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72e44f044175e45dca60ca90fb015ec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sizeX: 20
-  _sizeY: 20
-  _cellSize: {x: 0, y: 0}
+  _mapSizeX: 10
+  _mapSizeY: 10
   _cameraRoot: {fileID: 747986555}
   _characterOwnPrefab: {fileID: 136558, guid: f3ba69e6a2e164d6889c7cfc85170ef8, type: 2}
   _characterOppPrefab: {fileID: 171338, guid: 1ccaa04159d574832bbc1d016850d0e1, type: 2}
+  _eggOwnPrefab: {fileID: 0}
+  _eggOppPrefab: {fileID: 0}
   _groundPrefab: {fileID: 166882, guid: 1b1d28610ee9941d7801a679cb6f4776, type: 2}
   _wallPrefab: {fileID: 166882, guid: 25fe004508120421980a3c3ee32806b6, type: 2}
   _riverPrefab: {fileID: 166882, guid: 8c8aca9352a7f409397804ab73f99a1b, type: 2}

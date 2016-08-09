@@ -4,12 +4,12 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
 	[SerializeField]
-	private int _mapSizeX;
+	private int _mapSizeX = 10;
 
 	public int mapSizeX { get { return _mapSizeX; } }
 	
 	[SerializeField]
-	private int _mapSizeY;
+	private int _mapSizeY = 10;
 
 	public int mapSizeY { get { return _mapSizeY; } }
 
@@ -23,6 +23,12 @@ public class GameManager : MonoBehaviour
 
 	[SerializeField]
 	private GameObject _characterOppPrefab;
+
+	[SerializeField]
+	private GameEgg _eggOwnPrefab;
+
+	[SerializeField]
+	private GameEgg _eggOppPrefab;
 
 	[SerializeField]
 	private GameObject _groundPrefab;
@@ -126,6 +132,22 @@ public class GameManager : MonoBehaviour
 		character.SetUp(side);
 
 		return character;
+	}
+
+	/// <summary>
+	/// 卵を配置する
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="side"></param>
+	/// <returns></returns>
+	public GameEgg GenerateEgg(int x, int y, Const.Side side)
+	{
+		var prefab = side == Const.Side.Own ? _eggOwnPrefab : _eggOppPrefab;
+		var egg = Instantiate<GameEgg>(prefab);
+		egg.transform.position = new Vector3(Const.cellSizeX * x, Const.cellSizeY * y, Const.eggPositionZ);
+		egg.SetUp(side);
+		return egg;
 	}
 
 	public void SetFood(int x, int y)
