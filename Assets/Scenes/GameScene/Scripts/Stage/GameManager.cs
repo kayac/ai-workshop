@@ -1,23 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class GameStage : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
 	[SerializeField]
-	private int _sizeX;
+	private int _mapSizeX;
 
-	public int sizeX { get { return _sizeX; } }
+	public int mapSizeX { get { return _mapSizeX; } }
 	
 	[SerializeField]
-	private int _sizeY;
+	private int _mapSizeY;
 
-	public int sizeY { get { return _sizeY; } }
-
-
-	[SerializeField]
-	private Vector2 _cellSize;
-
-	private Vector2 cellSize { get { return _cellSize; } }
+	public int mapSizeY { get { return _mapSizeY; } }
 
 	public GameMapCell[,] map { get; private set ; }
 
@@ -62,11 +56,11 @@ public class GameStage : MonoBehaviour
 	void InitMap()
 	{
 		var generator = GetComponent<GameMapGeneratorBase>();
-		map = generator.Generate(_sizeX, _sizeY);
+		map = generator.Generate(_mapSizeX, _mapSizeY);
 
-		for (int x = 0; x < _sizeX; x++)
+		for (int x = 0; x < _mapSizeX; x++)
 		{
-			for (int y = 0; y < _sizeY; y++)
+			for (int y = 0; y < _mapSizeY; y++)
 			{
 				var cell = map[x, y];
 				
@@ -110,8 +104,8 @@ public class GameStage : MonoBehaviour
 		{
 			var side = count / 2 < i ? Const.Side.Own : Const.Side.Opp;
 
-			var x = Random.Range(0, _sizeX);
-			var y = Random.Range(0, _sizeY);
+			var x = Random.Range(0, _mapSizeX);
+			var y = Random.Range(0, _mapSizeY);
 
 			var character = GenerateCharacter(x, y, side);
 

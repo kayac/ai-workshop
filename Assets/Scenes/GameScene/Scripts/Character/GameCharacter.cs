@@ -97,14 +97,37 @@ public class GameCharacter : MonoBehaviour
 
 	private void EatFood(GameFood food)
 	{
-		exp++;
+		AddExp(1);
+		food.OnEat();
+	}
 
+	private void EatCharacter(GameCharacter character)
+	{
+		if (character.side == this.side) return;
+
+		if (this.level > character.level)
+		{
+			AddExp(5);
+			character.Kill();
+		}
+
+	}
+
+	private void EatEgg(GameEgg egg)
+	{
+	
+	}
+
+	private void AddExp(int exp)
+	{
+		this.exp += exp;
 		int nextExp = 0;
 		switch (level)
 		{
 			case 1: nextExp = 5; break;
 			case 2: nextExp = 10; break;
 			case 3: nextExp = 15; break;
+			default: nextExp = int.MaxValue; break;
 		}
 
 		if (nextExp <= exp)
@@ -115,19 +138,6 @@ public class GameCharacter : MonoBehaviour
 
 			_text.text = level.ToString();
 		}
-
-		food.OnEat();
-	}
-
-	private void EatCharacter(GameCharacter character)
-	{
-		if (character.side == this.side) return;
-
-		if (this.level > character.level)
-		{
-			character.Kill();
-		}
-
 	}
 
 	public void Kill()

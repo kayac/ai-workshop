@@ -27,6 +27,17 @@ public class GameEgg : MonoBehaviour
 	/// <returns></returns>
 	public bool alreadyHatch { get; private set; }
 
+	/// <summary>
+	/// 味方の卵/敵の卵
+	/// </summary>
+	/// <returns></returns>
+	public Const.Side side { get; private set; }
+
+	public void SetUp(Const.Side side)
+	{
+		this.side = side;
+	}
+
 	void Update()
 	{
 		if (!alreadyHatch)
