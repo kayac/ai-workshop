@@ -8,7 +8,7 @@ public class GameCharacter : MonoBehaviour
 {
 	[SerializeField]
 	private float _speed;
-
+	
 	private Rigidbody _rigidbody;
 
 	public int level { get; private set; } 
@@ -16,11 +16,17 @@ public class GameCharacter : MonoBehaviour
 
 	public Const.Side side { get; private set; }
 
+	private TextMesh _text;
+
 	void Awake()
 	{
 		_rigidbody = GetComponent<Rigidbody>();
 		exp = 0;
 		level = 1;
+
+		_text = GetComponentInChildren<TextMesh>();
+
+		_text.text = level.ToString();
 	}
 
 	public void SetUp(Const.Side side)
@@ -61,6 +67,13 @@ public class GameCharacter : MonoBehaviour
 		{
 			EatFood(food);
 		}
+
+		var character = other.GetComponentInParent<GameCharacter>();
+
+		if (character != null)
+		{
+			EatCharacter(character);
+		}
 	}
 
 	private void EatFood(GameFood food)
@@ -80,9 +93,27 @@ public class GameCharacter : MonoBehaviour
 			Debug.Log("level up");
 			exp = 0;
 			level++;
+
+			_text.text = level.ToString();
 		}
 
 		food.OnEat();
+	}
+
+	private void EatCharacter(GameCharacter character)
+	{
+		if (character.side == this.side) return;
+
+		if (this.level > character.level)
+		{
+			character.Kill();
+		}
+
+	}
+
+	public void Kill()
+	{
+		Destroy(this.gameObject);
 	}
 
 	public void MoveTo(Vector3 position, Action onComplete = null)
