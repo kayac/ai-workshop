@@ -147,6 +147,13 @@ public class GameCharacter : MonoBehaviour
 		{
 			EatCharacter(character);
 		}
+
+		var egg = other.GetComponent<GameEgg>();
+
+		if (egg != null)
+		{
+			EatEgg(egg);
+		}
 	}
 
 	private void EatFood(GameFood food)
