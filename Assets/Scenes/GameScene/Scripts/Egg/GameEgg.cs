@@ -17,17 +17,6 @@ public class GameEgg : MonoBehaviour
 	private float _currentTime;
 
 	/// <summary>
-	/// 卵が孵化した際のデリゲード
-	/// </summary>
-	/// <param name="egg"></param>
-	public delegate void HatchDelegate(GameEgg egg);
-
-	/// <summary>
-	/// 孵化した時に呼ばれる
-	/// </summary>
-	public HatchDelegate onHatch;
-
-	/// <summary>
 	/// 既に孵化しているか
 	/// </summary>
 	/// <returns></returns>
@@ -52,10 +41,7 @@ public class GameEgg : MonoBehaviour
 
 			if (hatchTime <= _currentTime)
 			{
-				if (onHatch != null)
-				{
-					onHatch(this);
-				}
+				GameManager.instance.GenerateEgg(transform.position.x, transform.position.y, side);
 				alreadyHatch = true;
 				OnHatch();
 			}

@@ -74,10 +74,6 @@ public class GameCharacter : MonoBehaviour
 	/// <returns></returns>
 	public int currentLayEggCount { get; private set; }
 
-	public delegate GameEgg LayEggDelegate(int x, int y, Const.Side side);
-
-	public LayEggDelegate onLayEgg;
-
 	private TextMesh _text;
 
 	void OnValidate()
@@ -207,7 +203,7 @@ public class GameCharacter : MonoBehaviour
 
 	private void LayEgg()
 	{
-		onLayEgg((int)transform.position.x, (int)transform.position.y, side);
+		GameManager.instance.GenerateEgg(transform.position.x, transform.position.y, side);
 	}
 
 	public void Kill()

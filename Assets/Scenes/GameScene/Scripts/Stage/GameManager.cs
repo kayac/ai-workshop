@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
+	public static GameManager instance { get; private set ; }
+
 	[SerializeField]
 	private int _mapSizeX = 10;
 
@@ -44,8 +46,24 @@ public class GameManager : MonoBehaviour
 
 	private GameCharacter _playerCharacter;
 
+	public List<GameCharacter> ownPlayers { get; private set; }
+	
+	public List<GameCharacter> oppPlayers { get; private set; }
+
+	public List<GameFood> foods { get; private set; }
+
+	public List<GameEgg> eggs { get; private set ; }
+
 	void Awake()
 	{
+		if (instance != null)
+		{	
+			DestroyImmediate(this.gameObject);
+			return;
+		}
+
+		instance = this;
+
 		InitMap();
 		InitPlayerCharacter();
 		InitOtherCharacter();
@@ -59,7 +77,10 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	void InitMap()
+	/// <summary>
+	/// マップを生成する
+	/// </summary>
+	private void InitMap()
 	{
 		var generator = GetComponent<GameMapGeneratorBase>();
 		map = generator.Generate(_mapSizeX, _mapSizeY);
@@ -96,12 +117,18 @@ public class GameManager : MonoBehaviour
 
 	}
 
-	void InitPlayerCharacter()
+	/// <summary>
+	/// プレイヤーキャラクターを生成する
+	/// </summary>
+	private void InitPlayerCharacter()
 	{
 		_playerCharacter = GenerateCharacter(0, 0, Const.Side.Own);
 		_playerCharacter.gameObject.AddComponent<GameCharacterController>();
 	}
 
+	/// <summary>
+	/// 他のキャラを生成する
+	/// </summary>
 	void InitOtherCharacter()
 	{
 		int count = 20;
@@ -119,6 +146,13 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// キャラクターを生成する
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="side"></param>
+	/// <returns></returns>
 	public GameCharacter GenerateCharacter(int x, int y, Const.Side side)
 	{
 		var prefab = side == Const.Side.Own ? _characterOwnPrefab : _characterOppPrefab;
@@ -130,24 +164,37 @@ public class GameManager : MonoBehaviour
 			Const.cellSizeX * x, Const.cellSizeY * y, Const.characterPositionZ);
 		
 		character.SetUp(side);
-		character.onLayEgg = GenerateEgg;
 		return character;
 	}
-	
+
 	/// <summary>
-	/// 卵を配置する
+	/// 卵を生成する(マップのグリッドに沿って)
+	/// </summary>
+	/// <param name="mapX"></param>
+	/// <param name="mapY"></param>
+	/// <param name="side"></param>
+	/// <returns></returns>
+	public GameEgg GenerateEgg(int mapX, int mapY, Const.Side side)
+	{
+		var x = Const.cellSizeX * mapX;
+		var y = Const.cellSizeY * mapY;
+
+		return GenerateEgg(x, y, side);
+	}
+
+	/// <summary>
+	/// 卵を生成する
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	/// <param name="side"></param>
 	/// <returns></returns>
-	public GameEgg GenerateEgg(int x, int y, Const.Side side)
+	public GameEgg GenerateEgg(float x, float y, Const.Side side)
 	{
 		var prefab = side == Const.Side.Own ? _eggOwnPrefab : _eggOppPrefab;
 		var egg = Instantiate<GameEgg>(prefab);
-		egg.transform.position = new Vector3(Const.cellSizeX * x, Const.cellSizeY * y, Const.eggPositionZ);
+		egg.transform.position = new Vector3(x, y, Const.eggPositionZ);
 		egg.SetUp(side);
-		egg.onHatch = OnHatchEgg;
 		return egg;
 	}
 
@@ -161,6 +208,11 @@ public class GameManager : MonoBehaviour
 		character.gameObject.AddComponent<GameCharacterAIRandom>();
 	}
 
+	/// <summary>
+	/// 食べ物を配置する
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
 	public void SetFood(int x, int y)
 	{
 		var go = (GameObject)Instantiate(_foodPrefab);
@@ -168,5 +220,10 @@ public class GameManager : MonoBehaviour
 		go.transform.position = new Vector3(Const.cellSizeX * x, Const.cellSizeZ * y, Const.foodPositionZ);
 
 		go.transform.parent = transform;
+	}
+
+	public void OnDeadPlayerCharacter()
+	{
+
 	}
 }
