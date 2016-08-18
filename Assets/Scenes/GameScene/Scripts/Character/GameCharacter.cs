@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 
 /// <summary>
@@ -9,19 +9,51 @@ using DG.Tweening;
 [RequireComponent(typeof(Rigidbody))]
 public class GameCharacter : MonoBehaviour
 {
+	[System.Serializable]
+	public class LevelData
+	{
+		[Header("レベル")]
+		[SerializeField]
+		private int _level;
+		public int level { get { return _level; } }
+
+		[Header("このレベルに到達するまでの経験値")]
+		[SerializeField]
+		private int _exp;
+		public int exp { get { return _exp; } }
+
+		[Header("卵を産むまでのカウント -1を指定すると産まない")]
+		[SerializeField]
+		private int _layEggCount;
+		public int layEggCount { get { return _layEggCount; } }
+	}
+
 	/// <summary>
 	/// 移動速度(毎秒あたり)
 	/// </summary>
+	[Header("移動速度(毎秒あたり)")]
 	[SerializeField]
 	private float _speed;
 	
+	/// <summary>
+	/// レベル毎のパラメーター一覧
+	/// </summary>
+	[Header("レベル毎のパラメーター一覧")]
+	[SerializeField]
+	private List<LevelData> _levels;
+
 	private Rigidbody _rigidbody;
+
+	private LevelData _levelData;
+
+	private LevelData _nextLevelData;
+
 
 	/// <summary>
 	/// 現在のレベル
 	/// </summary>
 	/// <returns></returns>
-	public int level { get; private set; } 
+	public int level { get { return _levelData.level; }} 
 
 	/// <summary>
 	/// 現在の経験値
@@ -34,14 +66,36 @@ public class GameCharacter : MonoBehaviour
 	/// </summary>
 	/// <returns></returns>
 	public Const.Side side { get; private set; }
+	
+	/// <summary>
+	/// 産卵するまでのカウント
+	/// 何かを食べると増える 
+	/// </summary>
+	/// <returns></returns>
+	public int currentLayEggCount { get; private set; }
+
+	public delegate GameEgg LayEggDelegate(int x, int y, Const.Side side);
+
+	public LayEggDelegate onLayEgg;
 
 	private TextMesh _text;
+
+	void OnValidate()
+	{
+		_levels.Sort(delegate(LevelData a, LevelData b)
+		{
+			return a.level - b.level;
+		}
+		);
+	}
 
 	void Awake()
 	{
 		_rigidbody = GetComponent<Rigidbody>();
 		exp = 0;
-		level = 1;
+
+		_levelData = _levels[0];
+		_nextLevelData = _levels[1];
 
 		_text = GetComponentInChildren<TextMesh>();
 
@@ -115,29 +169,38 @@ public class GameCharacter : MonoBehaviour
 
 	private void EatEgg(GameEgg egg)
 	{
-	
+		if (egg.side == this.side) return;
+		AddExp(3);
+		egg.OnEat();
 	}
 
-	private void AddExp(int exp)
+	private void AddExp(int add)
 	{
-		this.exp += exp;
-		int nextExp = 0;
-		switch (level)
+		this.exp += add;
+
+		currentLayEggCount += add;
+
+		if (_levelData.layEggCount <= currentLayEggCount && _levelData.layEggCount > 0)
 		{
-			case 1: nextExp = 5; break;
-			case 2: nextExp = 10; break;
-			case 3: nextExp = 15; break;
-			default: nextExp = int.MaxValue; break;
+			currentLayEggCount = 0;
+			LayEgg();
 		}
 
-		if (nextExp <= exp)
-		{
-			Debug.Log("level up");
-			exp = 0;
-			level++;
+		if (_nextLevelData == null) return;
 
+		int nextExp = _nextLevelData.exp;
+		if (nextExp <= this.exp)
+		{
+			this.exp = 0;
+			_levelData = _nextLevelData;
+			_nextLevelData = _levels.Find(m => m.level > _levelData.level);
 			_text.text = level.ToString();
 		}
+	}
+
+	private void LayEgg()
+	{
+		onLayEgg((int)transform.position.x, (int)transform.position.y, side);
 	}
 
 	public void Kill()

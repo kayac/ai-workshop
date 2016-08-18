@@ -167,6 +167,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
+  _levels:
+  - _level: 1
+    _exp: 0
+    _layEggCount: -1
+  - _level: 2
+    _exp: 5
+    _layEggCount: -1
+  - _level: 3
+    _exp: 10
+    _layEggCount: 10
+  - _level: 4
+    _exp: 20
+    _layEggCount: 10
 --- !u!135 &13516878
 SphereCollider:
   m_ObjectHideFlags: 1

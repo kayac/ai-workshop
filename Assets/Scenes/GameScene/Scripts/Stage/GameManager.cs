@@ -130,10 +130,10 @@ public class GameManager : MonoBehaviour
 			Const.cellSizeX * x, Const.cellSizeY * y, Const.characterPositionZ);
 		
 		character.SetUp(side);
-
+		character.onLayEgg = GenerateEgg;
 		return character;
 	}
-
+	
 	/// <summary>
 	/// 卵を配置する
 	/// </summary>
@@ -147,7 +147,18 @@ public class GameManager : MonoBehaviour
 		var egg = Instantiate<GameEgg>(prefab);
 		egg.transform.position = new Vector3(Const.cellSizeX * x, Const.cellSizeY * y, Const.eggPositionZ);
 		egg.SetUp(side);
+		egg.onHatch = OnHatchEgg;
 		return egg;
+	}
+
+	/// <summary>
+	/// 卵が孵化した際に呼ばれる
+	/// </summary>
+	/// <param name="egg"></param>
+	private void OnHatchEgg(GameEgg egg)
+	{
+		var character = GenerateCharacter((int)egg.transform.position.x, (int)egg.transform.position.y, egg.side);
+		character.gameObject.AddComponent<GameCharacterAIRandom>();
 	}
 
 	public void SetFood(int x, int y)

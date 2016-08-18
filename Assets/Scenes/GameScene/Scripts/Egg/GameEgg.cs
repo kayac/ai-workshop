@@ -17,9 +17,15 @@ public class GameEgg : MonoBehaviour
 	private float _currentTime;
 
 	/// <summary>
+	/// 卵が孵化した際のデリゲード
+	/// </summary>
+	/// <param name="egg"></param>
+	public delegate void HatchDelegate(GameEgg egg);
+
+	/// <summary>
 	/// 孵化した時に呼ばれる
 	/// </summary>
-	public event System.Action<GameEgg> onHatch;
+	public HatchDelegate onHatch;
 
 	/// <summary>
 	/// 既に孵化しているか
@@ -51,7 +57,18 @@ public class GameEgg : MonoBehaviour
 					onHatch(this);
 				}
 				alreadyHatch = true;
+				OnHatch();
 			}
 		}
+	}
+
+	public void OnEat()
+	{
+		Destroy(this.gameObject);
+	}
+
+	private void OnHatch()
+	{
+		Destroy(this.gameObject);
 	}
 }

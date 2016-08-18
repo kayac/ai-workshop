@@ -13,7 +13,7 @@ SceneSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -37,12 +37,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0.44692534, g: 0.49678725, b: 0.57508564, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   m_GIWorkflowMode: 0
-  m_LightmapsMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -53,17 +53,22 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 3
+    serializedVersion: 4
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
     m_TextureHeight: 1024
+    m_AO: 0
     m_AOMaxDistance: 1
-    m_Padding: 2
     m_CompAOExponent: 0
+    m_CompAOExponentDirect: 0
+    m_Padding: 2
     m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 1
     m_TextureCompression: 1
+    m_DirectLightInLightProbes: 1
     m_FinalGather: 0
+    m_FinalGatherFiltering: 1
     m_FinalGatherRayCount: 1024
     m_ReflectionCompression: 2
   m_LightingDataAsset: {fileID: 0}
@@ -137,7 +142,7 @@ Light:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1301346326}
   m_Enabled: 1
-  serializedVersion: 6
+  serializedVersion: 7
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
@@ -147,6 +152,7 @@ Light:
   m_Shadows:
     m_Type: 2
     m_Resolution: -1
+    m_CustomResolution: -1
     m_Strength: 1
     m_Bias: 0.05
     m_NormalBias: 0.4
@@ -159,10 +165,10 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_Lightmapping: 4
+  m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
-  m_AreaSize: {x: 1, y: 1}
 --- !u!4 &1301346328
 Transform:
   m_ObjectHideFlags: 0
@@ -204,13 +210,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72e44f044175e45dca60ca90fb015ec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapSizeX: 10
-  _mapSizeY: 10
+  _mapSizeX: 20
+  _mapSizeY: 20
   _cameraRoot: {fileID: 747986555}
   _characterOwnPrefab: {fileID: 136558, guid: f3ba69e6a2e164d6889c7cfc85170ef8, type: 2}
   _characterOppPrefab: {fileID: 171338, guid: 1ccaa04159d574832bbc1d016850d0e1, type: 2}
-  _eggOwnPrefab: {fileID: 0}
-  _eggOppPrefab: {fileID: 0}
+  _eggOwnPrefab: {fileID: 11436204, guid: 96c254007c28b40459ff0822e6a184a4, type: 2}
+  _eggOppPrefab: {fileID: 11450286, guid: f72ed6ec2af054a47b7b198d51f3ddaa, type: 2}
   _groundPrefab: {fileID: 166882, guid: 1b1d28610ee9941d7801a679cb6f4776, type: 2}
   _wallPrefab: {fileID: 166882, guid: 25fe004508120421980a3c3ee32806b6, type: 2}
   _riverPrefab: {fileID: 166882, guid: 8c8aca9352a7f409397804ab73f99a1b, type: 2}
