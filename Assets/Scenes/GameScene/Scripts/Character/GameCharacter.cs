@@ -97,7 +97,7 @@ public class GameCharacter : GameCarriedObject
 
 		_text = GetComponentInChildren<TextMesh>();
 
-		_text.text = level.ToString();
+		//_text.text = level.ToString();
 	}
 
 	void Update()
@@ -213,7 +213,7 @@ public class GameCharacter : GameCarriedObject
 			this.exp = 0;
 			_levelData = _nextLevelData;
 			_nextLevelData = _levels.Find(m => m.level > _levelData.level);
-			_text.text = level.ToString();
+			//_text.text = level.ToString();
 		}
 	}
 
