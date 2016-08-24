@@ -15,9 +15,23 @@ public class GameCharacterController : MonoBehaviour
 		_character = GetComponent<GameCharacter>();
 	}
 
+	void Update()
+	{
+		if (Input.GetKey(KeyCode.Space))
+		{
+			_character.StartCarry();
+		}
+		else
+		{
+			_character.EndCarry();
+		}
+	}
+
 	void FixedUpdate()
 	{
 		ProcessMove();
+
+		
 	}
 
 	private void ProcessMove()

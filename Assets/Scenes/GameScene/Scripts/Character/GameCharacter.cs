@@ -7,7 +7,7 @@ using DG.Tweening;
 /// キャラクター
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
-public class GameCharacter : MonoBehaviour
+public class GameCharacter : GameCarriedObject
 {
 	[System.Serializable]
 	public class LevelData
@@ -73,8 +73,8 @@ public class GameCharacter : MonoBehaviour
 	/// </summary>
 	/// <returns></returns>
 	public int currentLayEggCount { get; private set; }
-
-	public bool IsCarried { get; private set; }
+	
+	private GameCarriedObject _carryingTarget;
 
 	private TextMesh _text;
 
@@ -100,6 +100,14 @@ public class GameCharacter : MonoBehaviour
 		_text.text = level.ToString();
 	}
 
+	void Update()
+	{
+		if (_carryingTarget != null)
+		{
+			_carryingTarget.transform.position = transform.position + Vector3.left /2;
+		}
+	}
+
 	public void SetUp(Const.Side side)
 	{
 		this.side = side;
@@ -107,26 +115,31 @@ public class GameCharacter : MonoBehaviour
 
 	public void Move(Vector3 direction)
 	{
+		if (isCarried) return;
 		_rigidbody.MovePosition(transform.position + direction);
 	}
 
 	public void MoveUp()
 	{
+		if (isCarried) return;
 		Move(Vector3.up * _speed * Time.fixedDeltaTime);
 	}
 
 	public void MoveDown()
 	{
+		if (isCarried) return;
 		Move(Vector3.down * _speed * Time.fixedDeltaTime);
 	}
 
 	public void MoveLeft()
 	{
+		if (isCarried) return;
 		Move(Vector3.left * _speed * Time.fixedDeltaTime);
 	}
 
 	public void MoveRight()
 	{
+		if (isCarried) return;
 		Move(Vector3.right * _speed * Time.fixedDeltaTime);
 	}
 
@@ -156,13 +169,14 @@ public class GameCharacter : MonoBehaviour
 
 	private void EatFood(GameFood food)
 	{
+		if (food.isCarried) return;
 		AddExp(1);
 		food.OnEat();
 	}
 
 	private void EatCharacter(GameCharacter character)
 	{
-		if (character.side == this.side) return;
+		if (character.side == this.side || character.isCarried) return;
 
 		if (this.level > character.level)
 		{
@@ -174,7 +188,7 @@ public class GameCharacter : MonoBehaviour
 
 	private void EatEgg(GameEgg egg)
 	{
-		if (egg.side == this.side) return;
+		if (egg.side == this.side|| egg.isCarried) return;
 		AddExp(3);
 		egg.OnEat();
 	}
@@ -215,6 +229,8 @@ public class GameCharacter : MonoBehaviour
 
 	public void MoveTo(Vector3 position, Action onComplete = null)
 	{
+		if (isCarried) return;
+
 		var distance = Vector3.Distance(position, this.transform.position);
 		var duration = distance / _speed;
 		_rigidbody.DOMove(position, duration, false)
@@ -247,26 +263,45 @@ public class GameCharacter : MonoBehaviour
 
 		foreach (var col in list)
 		{
+			if (col.gameObject == this.gameObject) continue;
+
 			var character = col.GetComponent<GameCharacter>();
 
 			if (character != null)
 			{
 				if (character.level < this.level)
 				{
-					character.OnStartCarried(this);
+					character.OnCarriedStart(this);
+					_carryingTarget = character;
 					return;
 				}
 			}
-		}
-	} 
 
-	public void OnStartCarried(GameCharacter character)
-	{
-		IsCarried = true;
+			var obj = col.GetComponent<GameCarriedObject>();
+
+			if (obj != null)
+			{
+				obj.OnCarriedStart(this);
+				_carryingTarget = obj;
+			}
+		}
 	}
 
-	public void OnEndCarried(GameCharacter character)
+	public void EndCarry()
 	{
-		IsCarried = false;
+		if (_carryingTarget == null) return;
+		_carryingTarget.OnCarriedEnd(this);
+		_carryingTarget = null;
+	}
+
+	public override void OnCarriedStart(GameCharacter character)
+	{
+		isCarried = true;
+		_rigidbody.Sleep();
+	}
+
+	public override void OnCarriedEnd(GameCharacter character)
+	{
+		isCarried = false;
 	}
 }

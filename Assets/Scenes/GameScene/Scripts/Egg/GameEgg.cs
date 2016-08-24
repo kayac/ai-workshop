@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// 卵 : 一定時間で孵化する
 /// </summary>
-public class GameEgg : MonoBehaviour
+public class GameEgg : GameCarriedObject
 {
 	/// <summary>
 	/// 産まれるまでの時間(秒)
@@ -56,5 +56,15 @@ public class GameEgg : MonoBehaviour
 	private void OnHatch()
 	{
 		Destroy(this.gameObject);
+	}
+
+	public override void OnCarriedStart(GameCharacter character)
+	{
+		isCarried = true;
+	}
+
+	public override void OnCarriedEnd(GameCharacter character)
+	{
+		isCarried = false;
 	}
 }
