@@ -74,6 +74,8 @@ public class GameCharacter : MonoBehaviour
 	/// <returns></returns>
 	public int currentLayEggCount { get; private set; }
 
+	public bool IsCarried { get; private set; }
+
 	private TextMesh _text;
 
 	void OnValidate()
@@ -226,5 +228,45 @@ public class GameCharacter : MonoBehaviour
 				}
 			}
 		);
+	}
+
+	public void StartCarry()
+	{
+		var mask = LayerMask.GetMask(Const.layerNameCharacter, Const.layerNameEgg, Const.layerNameFood);
+		var colliders = Physics.OverlapBox(transform.position, Vector3.one / 2, Quaternion.Euler(0, 0, 0), mask);
+		
+		var list = new List<Collider>(colliders);
+
+		list.Sort(delegate(Collider a, Collider b)
+		{
+			return 
+				Vector3.Distance(a.transform.position, transform.position)
+				.CompareTo(
+				Vector3.Distance(b.transform.position, transform.position));
+		});
+
+		foreach (var col in list)
+		{
+			var character = col.GetComponent<GameCharacter>();
+
+			if (character != null)
+			{
+				if (character.level < this.level)
+				{
+					character.OnStartCarried(this);
+					return;
+				}
+			}
+		}
+	} 
+
+	public void OnStartCarried(GameCharacter character)
+	{
+		IsCarried = true;
+	}
+
+	public void OnEndCarried(GameCharacter character)
+	{
+		IsCarried = false;
 	}
 }

@@ -12,6 +12,11 @@
 	public enum Side
 	{
 		Own,
-		Opp
+		Opp,
+		None
 	}
+
+	public const string layerNameCharacter	= "Character";
+	public const string layerNameFood 		= "Food";
+	public const string layerNameEgg		= "Egg";
 }
