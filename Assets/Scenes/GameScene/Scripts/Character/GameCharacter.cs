@@ -219,8 +219,10 @@ public class GameCharacter : GameCarriedObject
 			_levelData = _nextLevelData;
 			_nextLevelData = _levels.Find(m => m.level > _levelData.level);
 
-			transform.localScale = Vector3.one * 0.33f * _nextLevelData.level;
-			//_text.text = level.ToString();
+			if (_nextLevelData != null)
+			{
+				transform.localScale = Vector3.one * 0.33f * _nextLevelData.level;
+			}
 		}
 	}
 

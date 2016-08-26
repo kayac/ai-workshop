@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
 	public static GameManager instance { get; private set ; }
+
+	[SerializeField]
+	private float _gameTime = 10f;
 
 	[SerializeField]
 	private int _mapSizeX = 10;
@@ -43,6 +47,12 @@ public class GameManager : MonoBehaviour
 
 	[SerializeField]
 	private GameObject _foodPrefab;
+
+	[SerializeField]
+	private Text _timeText;
+
+	[SerializeField]
+	private Text _resultText;
 
 	private GameCharacter _playerCharacter;
 
@@ -90,7 +100,37 @@ public class GameManager : MonoBehaviour
 				ProcessSelectPlayerCharacter();
 				break;
 		}
+
+		_gameTime -= Time.deltaTime;
+
+		_timeText.text = _gameTime.ToString();
+
+		if (_gameTime <= 0)
+		{
+			OnEndGameTime();
+		}
 		
+	}
+
+	private void OnEndGameTime()
+	{
+		string str = "";
+
+		if (ownCharacters.Count == oppCharacters.Count)
+		{
+			str = "DRAW";
+		}
+		else if (ownCharacters.Count > oppCharacters.Count)
+		{
+			str = "YOU WIN";
+		}
+		else
+		{
+			str = "YOU LOSE";
+		}
+
+		_resultText.text = str;
+		_resultText.gameObject.SetActive(true);
 	}
 
 	private void ProcessPlay()
@@ -196,7 +236,7 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	void InitOtherCharacter()
 	{
-		int count = 20;
+		int count = 2;
 
 		for(int i = 0; i < count; i++)
 		{
@@ -300,6 +340,11 @@ public class GameManager : MonoBehaviour
 
 		ownCharacters.Remove(character);
 		oppCharacters.Remove(character);
+
+		if (ownCharacters.Count == 0 || oppCharacters.Count == 0)
+		{
+			OnEndGameTime();
+		}
 	}
 
 	public void OnDeadPlayerCharacter(GameCharacter character)
@@ -319,4 +364,6 @@ public class GameManager : MonoBehaviour
 		_selectingOwnCharacterIndex = 0;
 		_mode = Const.Mode.CharacterSelect;
 	}
+
+
 }
