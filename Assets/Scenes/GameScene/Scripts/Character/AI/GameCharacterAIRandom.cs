@@ -41,6 +41,8 @@ public class GameCharacterAIRandom : GameCharacterAIBase
 			{
 				yield return new WaitForEndOfFrame();
 			}
+
+			yield return new WaitForSeconds(1);
 		}
 	}
 }

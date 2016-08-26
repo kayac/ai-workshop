@@ -229,7 +229,11 @@ public class GameCharacter : GameCarriedObject
 
 	public void MoveTo(Vector3 position, Action onComplete = null)
 	{
-		if (isCarried) return;
+		if (isCarried)
+		{
+			onComplete();
+			return;
+		}
 
 		var distance = Vector3.Distance(position, this.transform.position);
 		var duration = distance / _speed;
