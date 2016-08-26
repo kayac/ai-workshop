@@ -74,6 +74,9 @@ public class GameCharacter : GameCarriedObject
 	/// <returns></returns>
 	public int currentLayEggCount { get; private set; }
 	
+
+	public event Action<GameCharacter> onDead;
+
 	private GameCarriedObject _carryingTarget;
 
 	private TextMesh _text;
@@ -94,6 +97,8 @@ public class GameCharacter : GameCarriedObject
 
 		_levelData = _levels[0];
 		_nextLevelData = _levels[1];
+
+		transform.localScale = Vector3.one * 0.33f;
 
 		_text = GetComponentInChildren<TextMesh>();
 
@@ -213,6 +218,8 @@ public class GameCharacter : GameCarriedObject
 			this.exp = 0;
 			_levelData = _nextLevelData;
 			_nextLevelData = _levels.Find(m => m.level > _levelData.level);
+
+			transform.localScale = Vector3.one * 0.33f * _nextLevelData.level;
 			//_text.text = level.ToString();
 		}
 	}
@@ -224,6 +231,11 @@ public class GameCharacter : GameCarriedObject
 
 	public void Kill()
 	{
+		if (onDead != null)
+		{
+			onDead(this);
+		}
+
 		Destroy(this.gameObject);
 	}
 

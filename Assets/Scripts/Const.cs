@@ -12,8 +12,13 @@
 	public enum Side
 	{
 		Own,
-		Opp,
-		None
+		Opp
+	}
+
+	public enum Mode
+	{
+		Play,
+		CharacterSelect
 	}
 
 	public const string layerNameCharacter	= "Character";

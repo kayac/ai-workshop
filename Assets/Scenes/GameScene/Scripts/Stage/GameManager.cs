@@ -46,16 +46,20 @@ public class GameManager : MonoBehaviour
 
 	private GameCharacter _playerCharacter;
 
-	public List<GameCharacter> ownPlayers { get; private set; }
+	private int _selectingOwnCharacterIndex;
+
+	public List<GameCharacter> ownCharacters { get; private set; }
 	
-	public List<GameCharacter> oppPlayers { get; private set; }
+	public List<GameCharacter> oppCharacters { get; private set; }
 
 	public List<GameFood> foods { get; private set; }
 
 	public List<GameEgg> eggs { get; private set ; }
 
+	private Const.Mode _mode;
+
 	void Awake()
-	{
+	{	
 		if (instance != null)
 		{	
 			DestroyImmediate(this.gameObject);
@@ -64,17 +68,72 @@ public class GameManager : MonoBehaviour
 
 		instance = this;
 
+		ownCharacters = new List<GameCharacter>();
+		oppCharacters = new List<GameCharacter>();
+
 		InitMap();
 		InitPlayerCharacter();
 		InitOtherCharacter();
+
+		_mode= Const.Mode.Play;
 	}
 
 	void Update()
+	{
+		switch (_mode)
+		{
+			case Const.Mode.Play:
+				ProcessPlay();
+				break;
+
+			case Const.Mode.CharacterSelect:
+				ProcessSelectPlayerCharacter();
+				break;
+		}
+		
+	}
+
+	private void ProcessPlay()
 	{
 		if (_playerCharacter != null)
 		{
 			_cameraRoot.position = _playerCharacter.transform.position;
 		}
+	}
+
+	private void ProcessSelectPlayerCharacter()
+	{
+		if (Input.GetKeyDown(KeyCode.LeftArrow))
+		{
+			_selectingOwnCharacterIndex--;
+
+			if (_selectingOwnCharacterIndex < 0)
+			{
+				_selectingOwnCharacterIndex = ownCharacters.Count - 1;
+			}
+		}
+
+		if (Input.GetKeyDown(KeyCode.RightArrow))
+		{
+			_selectingOwnCharacterIndex++;
+			if (ownCharacters.Count <= _selectingOwnCharacterIndex)
+			{
+				_selectingOwnCharacterIndex = 0;
+			}
+		}
+
+		var c = ownCharacters[_selectingOwnCharacterIndex];
+
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			SetUpPlayerCharacter(c);
+			_mode = Const.Mode.Play;
+			Time.timeScale = 1f;
+		}
+
+		
+
+		_cameraRoot.transform.position = c.transform.position;
 	}
 
 	/// <summary>
@@ -122,8 +181,14 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	private void InitPlayerCharacter()
 	{
-		_playerCharacter = GenerateCharacter(0, 0, Const.Side.Own);
+		SetUpPlayerCharacter(GenerateCharacter(0, 0, Const.Side.Own));
+	}
+
+	private void SetUpPlayerCharacter(GameCharacter character)
+	{
+		_playerCharacter = character;
 		_playerCharacter.gameObject.AddComponent<GameCharacterController>();
+		_playerCharacter.onDead += OnDeadPlayerCharacter;
 	}
 
 	/// <summary>
@@ -164,6 +229,13 @@ public class GameManager : MonoBehaviour
 			Const.cellSizeX * x, Const.cellSizeY * y, Const.characterPositionZ);
 		
 		character.SetUp(side);
+		
+		character.onDead += OnDeadCharacter;
+
+		var list = side == Const.Side.Own ? ownCharacters : oppCharacters;
+
+		list.Add(character);
+
 		return character;
 	}
 
@@ -222,8 +294,29 @@ public class GameManager : MonoBehaviour
 		go.transform.parent = transform;
 	}
 
-	public void OnDeadPlayerCharacter()
+	public void OnDeadCharacter(GameCharacter character)
 	{
+		character.onDead -= OnDeadCharacter;
+
+		ownCharacters.Remove(character);
+		oppCharacters.Remove(character);
+	}
+
+	public void OnDeadPlayerCharacter(GameCharacter character)
+	{
+		character.onDead -= OnDeadPlayerCharacter;
+
+		_playerCharacter = null;
+
+		SelectPlayerCharacter();
 		
+	}
+
+	public void SelectPlayerCharacter()
+	{
+		Time.timeScale = 0f;
+
+		_selectingOwnCharacterIndex = 0;
+		_mode = Const.Mode.CharacterSelect;
 	}
 }
