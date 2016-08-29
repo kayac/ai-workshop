@@ -9,24 +9,6 @@ using DG.Tweening;
 [RequireComponent(typeof(Rigidbody2D))]
 public class GameCharacter : GameCarriedObject
 {
-	[System.Serializable]
-	public class LevelData
-	{
-		[Header("レベル")]
-		[SerializeField]
-		private int _level;
-		public int level { get { return _level; } }
-
-		[Header("このレベルに到達するまでの経験値")]
-		[SerializeField]
-		private int _exp;
-		public int exp { get { return _exp; } }
-
-		[Header("卵を産むまでのカウント -1を指定すると産まない")]
-		[SerializeField]
-		private int _layEggCount;
-		public int layEggCount { get { return _layEggCount; } }
-	}
 
 	/// <summary>
 	/// 移動速度(毎秒あたり)
@@ -34,19 +16,12 @@ public class GameCharacter : GameCarriedObject
 	[Header("移動速度(毎秒あたり)")]
 	[SerializeField]
 	private float _speed;
-	
-	/// <summary>
-	/// レベル毎のパラメーター一覧
-	/// </summary>
-	[Header("レベル毎のパラメーター一覧")]
-	[SerializeField]
-	private List<LevelData> _levels;
 
 	private Rigidbody2D _rigidbody2D;
 
-	private LevelData _levelData;
+	private CharacterLevelData _levelData;
 
-	private LevelData _nextLevelData;
+	private CharacterLevelData _nextLevelData;
 
 
 	/// <summary>
@@ -79,28 +54,16 @@ public class GameCharacter : GameCarriedObject
 
 	private GameCarriedObject _carryingTarget;
 
-	private TextMesh _text;
-
-	void OnValidate()
-	{
-		_levels.Sort(delegate(LevelData a, LevelData b)
-		{
-			return a.level - b.level;
-		}
-		);
-	}
 
 	void Awake()
 	{
 		_rigidbody2D = GetComponent<Rigidbody2D>();
 		exp = 0;
 
-		_levelData = _levels[0];
-		_nextLevelData = _levels[1];
+		_levelData = Setting.characterLevels[0];
+		_nextLevelData = Setting.characterLevels[1];
 
-		transform.localScale = Vector3.one * 0.33f;
-
-		_text = GetComponentInChildren<TextMesh>();
+		UpdateSize();
 	}
 
 	void Update()
@@ -215,13 +178,16 @@ public class GameCharacter : GameCarriedObject
 		{
 			this.exp = 0;
 			_levelData = _nextLevelData;
-			_nextLevelData = _levels.Find(m => m.level > _levelData.level);
+			_nextLevelData = Setting.characterLevels.Find(m => m.level > _levelData.level);
 
-			if (_nextLevelData != null)
-			{
-				transform.localScale = Vector3.one * 0.33f * _nextLevelData.level;
-			}
+			UpdateSize();
 		}
+	}
+
+	private void UpdateSize()
+	{
+		var rate = (float)1f / (float)Setting.characterLevels.Count;
+		transform.localScale = Vector3.one * rate * _levelData.level;
 	}
 
 	private void LayEgg()

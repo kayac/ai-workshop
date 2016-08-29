@@ -214,6 +214,19 @@ public class GameManager : MonoBehaviour
 			}
 		}
 
+		// 外の壁を作成
+		for (int x = -1; x < _mapSizeX + 1; x++)
+		{
+			for (int y = -1; y < _mapSizeY + 1; y++)
+			{
+				if (0 <= x && x < _mapSizeX && 0 <= y && y < _mapSizeY) continue;
+
+				var wall = Instantiate<GameObject>(_wallPrefab);
+				var pos = new Vector3(Const.cellSizeX * x, Const.cellSizeY * y, Const.mapPositionZ);
+				
+				wall.transform.position = pos;
+			}
+		}
 	}
 
 	/// <summary>
