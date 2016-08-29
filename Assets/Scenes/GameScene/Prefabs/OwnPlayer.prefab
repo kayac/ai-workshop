@@ -13,7 +13,7 @@ GameObject:
   - 50: {fileID: 50000010404595068}
   - 58: {fileID: 58000011157257360}
   m_Layer: 8
-  m_Name: Own
+  m_Name: OwnPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

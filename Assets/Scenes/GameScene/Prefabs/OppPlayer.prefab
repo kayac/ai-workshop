@@ -13,7 +13,7 @@ GameObject:
   - 50: {fileID: 50000011102079514}
   - 58: {fileID: 58000014252833986}
   m_Layer: 8
-  m_Name: Opp
+  m_Name: OppPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

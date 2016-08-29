@@ -101,8 +101,6 @@ public class GameCharacter : GameCarriedObject
 		transform.localScale = Vector3.one * 0.33f;
 
 		_text = GetComponentInChildren<TextMesh>();
-
-		//_text.text = level.ToString();
 	}
 
 	void Update()

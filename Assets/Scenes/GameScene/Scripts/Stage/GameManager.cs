@@ -260,13 +260,17 @@ public class GameManager : MonoBehaviour
 	/// <returns></returns>
 	public GameCharacter GenerateCharacter(int x, int y, Const.Side side)
 	{
+		return GenerateCharacter(Const.cellSizeX * x, Const.cellSizeY + y, side);
+	}
+	
+	public GameCharacter GenerateCharacter(float x, float y, Const.Side side)
+	{
 		var prefab = side == Const.Side.Own ? _characterOwnPrefab : _characterOppPrefab;
 
 		var go = (GameObject)Instantiate(prefab);
 		var character = go.GetComponent<GameCharacter>();
 
-		character.transform.position = new Vector3(
-			Const.cellSizeX * x, Const.cellSizeY * y, Const.characterPositionZ);
+		character.transform.position = new Vector3(x, y, Const.characterPositionZ);
 		
 		character.SetUp(side);
 		
