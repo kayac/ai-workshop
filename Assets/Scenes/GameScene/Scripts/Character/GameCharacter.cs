@@ -6,7 +6,7 @@ using DG.Tweening;
 /// <summary>
 /// キャラクター
 /// </summary>
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class GameCharacter : GameCarriedObject
 {
 	[System.Serializable]
@@ -42,7 +42,7 @@ public class GameCharacter : GameCarriedObject
 	[SerializeField]
 	private List<LevelData> _levels;
 
-	private Rigidbody _rigidbody;
+	private Rigidbody2D _rigidbody2D;
 
 	private LevelData _levelData;
 
@@ -92,7 +92,7 @@ public class GameCharacter : GameCarriedObject
 
 	void Awake()
 	{
-		_rigidbody = GetComponent<Rigidbody>();
+		_rigidbody2D = GetComponent<Rigidbody2D>();
 		exp = 0;
 
 		_levelData = _levels[0];
@@ -121,7 +121,7 @@ public class GameCharacter : GameCarriedObject
 	public void Move(Vector3 direction)
 	{
 		if (isCarried) return;
-		_rigidbody.MovePosition(transform.position + direction);
+		_rigidbody2D.MovePosition(transform.position + direction);
 	}
 
 	public void MoveUp()
@@ -148,7 +148,7 @@ public class GameCharacter : GameCarriedObject
 		Move(Vector3.right * _speed * Time.fixedDeltaTime);
 	}
 
-	void OnTriggerEnter(Collider other)
+	void OnTriggerEnter2D(Collider2D other)
 	{
 		var food = other.GetComponent<GameFood>();
 
@@ -251,7 +251,8 @@ public class GameCharacter : GameCarriedObject
 
 		var distance = Vector3.Distance(position, this.transform.position);
 		var duration = distance / _speed;
-		_rigidbody.DOMove(position, duration, false)
+
+		_rigidbody2D.DOMove(position, duration, false)
 		.SetEase(Ease.Linear)
 		.OnComplete(
 			() =>
@@ -315,7 +316,7 @@ public class GameCharacter : GameCarriedObject
 	public override void OnCarriedStart(GameCharacter character)
 	{
 		isCarried = true;
-		_rigidbody.Sleep();
+		_rigidbody2D.Sleep();
 	}
 
 	public override void OnCarriedEnd(GameCharacter character)
