@@ -16,8 +16,8 @@ TagManager:
   - Character
   - Food
   - Egg
-  - 
-  - 
+  - StageCharacter
+  - StageObstacle
   - 
   - 
   - 

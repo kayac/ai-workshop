@@ -236,7 +236,7 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	void InitOtherCharacter()
 	{
-		int count = 2;
+		int count = 20;
 
 		for(int i = 0; i < count; i++)
 		{
