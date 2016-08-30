@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
 
 		_gameTime -= Time.deltaTime;
 
-		_timeText.text = _gameTime.ToString();
+		_timeText.text = ((int)_gameTime).ToString();
 
 		if (_gameTime <= 0)
 		{

@@ -130,6 +130,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000011872630336}
   - 212: {fileID: 212000012782333870}
+  - 111: {fileID: 111000010578194650}
   m_Layer: 0
   m_Name: LightSprite
   m_TagString: Untagged
@@ -298,6 +299,21 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!111 &111000010578194650
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013249808840}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: dec5c523e275e49a9afe11fd7c4837e2, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: dec5c523e275e49a9afe11fd7c4837e2, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!212 &212000010083445192
 SpriteRenderer:
   m_ObjectHideFlags: 1
