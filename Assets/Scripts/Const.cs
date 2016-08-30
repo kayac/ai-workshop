@@ -1,9 +1,13 @@
-﻿public static class Const
+﻿using UnityEngine;
+
+public static class Const
 {
 	public const float cellSizeX = 1f;
 	public const float cellSizeY = 1f;
 	public const float cellSizeZ = 1f;
 	
+	public static readonly Vector2 cellSizeVector2 = new Vector2(cellSizeX, cellSizeY);
+
 	public const float mapPositionZ = 0.3f;
 	public const float characterPositionZ = 0f;
 	public const float foodPositionZ = 0.2f;
@@ -19,6 +23,13 @@
 	{
 		Play,
 		CharacterSelect
+	}
+
+	public enum MapCellType
+	{
+		None,
+		Wall,
+		River
 	}
 
 	public const string layerNameCharacter	= "Character";

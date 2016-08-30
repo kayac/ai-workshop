@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public static class Setting
 {
@@ -12,4 +13,6 @@ public static class Setting
 	);
 
 	public const float characterMaxLifeTime = 60f;
+
+	public static readonly Type foodGenerateLogic = typeof(FoodGenerateLogicRandom);
 }

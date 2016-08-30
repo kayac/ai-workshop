@@ -11,20 +11,20 @@ public class GameMapGeneratorRandom : GameMapGeneratorBase
 			for (int y = 0; y < sizeY; y++)
 			{
 				var r = Random.Range(0, 10);
-				var cellType = GameMapCell.CellType.None;
+				var cellType = Const.MapCellType.None;
 				var hasFood = false;
 				switch (r)
 				{
 					case 0:
-						cellType = GameMapCell.CellType.Wall;
+						cellType = Const.MapCellType.Wall;
 						break;
 
 					case 1:
-						cellType = GameMapCell.CellType.River;
+						cellType = Const.MapCellType.River;
 						break;
 				}
 				
-				if (cellType == GameMapCell.CellType.None)
+				if (cellType == Const.MapCellType.None)
 				{
 					var f = Random.Range(0, 5);
 					if (f == 0)

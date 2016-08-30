@@ -76,6 +76,8 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 
+		gameObject.AddComponent(Setting.foodGenerateLogic);
+
 		instance = this;
 
 		ownCharacters = new List<GameCharacter>();
@@ -194,9 +196,9 @@ public class GameManager : MonoBehaviour
 
 				switch (cell.contentType)
 				{
-					case GameMapCell.CellType.None: prefab = _groundPrefab; break;
-					case GameMapCell.CellType.Wall: prefab = _wallPrefab; break;
-					case GameMapCell.CellType.River: prefab = _riverPrefab; break;
+					case Const.MapCellType.None: prefab = _groundPrefab; break;
+					case Const.MapCellType.Wall: prefab = _wallPrefab; break;
+					case Const.MapCellType.River: prefab = _riverPrefab; break;
 				}
 
 				var go = (GameObject)Instantiate(prefab);
@@ -209,7 +211,7 @@ public class GameManager : MonoBehaviour
 
 				if (cell.hasFood)
 				{
-					SetFood(x, y);
+					GenerateFood(x, y);
 				}
 			}
 		}
@@ -342,7 +344,7 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
-	public void SetFood(int x, int y)
+	public void GenerateFood(int x, int y)
 	{
 		var go = (GameObject)Instantiate(_foodPrefab);
 
@@ -381,6 +383,7 @@ public class GameManager : MonoBehaviour
 		_selectingOwnCharacterIndex = 0;
 		_mode = Const.Mode.CharacterSelect;
 	}
+
 
 
 }
