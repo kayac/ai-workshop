@@ -52,6 +52,9 @@ public class GameManager : MonoBehaviour
 	private Text _timeText;
 
 	[SerializeField]
+	private Text _scoreText;
+
+	[SerializeField]
 	private Text _resultText;
 
 	private GameCharacter _playerCharacter;
@@ -68,6 +71,8 @@ public class GameManager : MonoBehaviour
 
 	private Const.Mode _mode;
 
+	private FoodGenerateLogicBase _foodGenerateLogic;
+
 	void Awake()
 	{	
 		if (instance != null)
@@ -76,7 +81,7 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 
-		gameObject.AddComponent(Setting.foodGenerateLogic);
+		_foodGenerateLogic = gameObject.AddComponent(Setting.foodGenerateLogicType) as FoodGenerateLogicBase;
 
 		instance = this;
 
@@ -86,6 +91,7 @@ public class GameManager : MonoBehaviour
 		InitMap();
 		InitPlayerCharacter();
 		InitOtherCharacter();
+		InitFoods();
 
 		_mode= Const.Mode.Play;
 	}
@@ -106,6 +112,12 @@ public class GameManager : MonoBehaviour
 		_gameTime -= Time.deltaTime;
 
 		_timeText.text = ((int)_gameTime).ToString();
+
+		_scoreText.text = string.Format(
+			"{0} vs {1}",
+			ownCharacters.Count,
+			oppCharacters.Count
+		);
 
 		if (_gameTime <= 0)
 		{
@@ -208,11 +220,6 @@ public class GameManager : MonoBehaviour
 				go.transform.position = pos;
 				
 				go.transform.parent = this.transform;
-
-				if (cell.hasFood)
-				{
-					GenerateFood(x, y);
-				}
 			}
 		}
 
@@ -264,6 +271,11 @@ public class GameManager : MonoBehaviour
 
 			character.gameObject.AddComponent<GameCharacterAIRandom>();
 		}
+	}
+
+	private void InitFoods()
+	{
+		_foodGenerateLogic.OnInit();
 	}
 
 	/// <summary>

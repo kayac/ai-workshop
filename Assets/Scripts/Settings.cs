@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// ゲームのバランス調整を行う設定クラス
+/// </summary>
 public static class Setting
 {
 	public static readonly List<CharacterLevelData> characterLevels = new List<CharacterLevelData>(
@@ -12,7 +15,18 @@ public static class Setting
 		}
 	);
 
+	/// <summary>
+	/// キャラクターの最大寿命(秒)
+	/// </summary>
 	public const float characterMaxLifeTime = 60f;
 
-	public static readonly Type foodGenerateLogic = typeof(FoodGenerateLogicRandom);
+	/// <summary>
+	/// フードを生成するロジックを指定する
+	/// </summary>
+	/// <param name="FoodGenerateLogicRandom"></param>
+	/// <returns></returns>
+	public static readonly Type foodGenerateLogicType = typeof(
+		// ここのクラスを変更するとゲーム開始時に使用するロジックが適用される
+		FoodGenerateLogicRandom
+	);
 }

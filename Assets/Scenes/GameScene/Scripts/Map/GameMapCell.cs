@@ -5,14 +5,11 @@ public class GameMapCell
 	public int y { get; private set; }
 	public Const.MapCellType contentType { get; private set; }
 
-	public bool hasFood { get; set; } 
-
-	public GameMapCell(int x, int y, Const.MapCellType contentTyoe, bool hasFood)
+	public GameMapCell(int x, int y, Const.MapCellType contentTyoe)
 	{
 		this.x = x;
 		this.y = y;
 		this.contentType = contentTyoe;
-		this.hasFood = hasFood;
 	}
 
 	public override string ToString()
