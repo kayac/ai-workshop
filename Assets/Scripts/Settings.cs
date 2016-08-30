@@ -59,4 +59,9 @@ public static class Setting
 	/// キャラクターを食べた時に貰える産卵カウント
 	/// </summary>
 	public const int layEggCountEatCharacter = 3;
+
+	/// <summary>
+	/// スーパー状態の持続時間(秒)
+	/// </summary>
+	public const float superModeTime = 10;
 }

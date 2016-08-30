@@ -356,13 +356,17 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
-	public void GenerateFood(int x, int y)
+	public void GenerateFood(int x, int y, Const.FoodType foodType)
 	{
 		var go = (GameObject)Instantiate(_foodPrefab);
 
 		go.transform.position = new Vector3(Const.cellSizeX * x, Const.cellSizeZ * y, Const.foodPositionZ);
 
 		go.transform.parent = transform;
+
+		var food = go.GetComponent<GameFood>();
+
+		food.SetUp(foodType);
 	}
 
 	public void OnDeadCharacter(GameCharacter character)

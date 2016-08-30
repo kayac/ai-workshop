@@ -69,6 +69,10 @@ public class GameCharacter : GameCarriedObject
 	/// <returns></returns>
 	public int currentLayEggCount { get; private set; }
 
+	/// <summary>
+	/// 最大寿命
+	/// </summary>
+	/// <returns></returns>
 	public float maxLifeTime { get; private set; }
 
 	/// <summary>
@@ -77,34 +81,23 @@ public class GameCharacter : GameCarriedObject
 	/// <returns></returns>
 	public float lifeTime { get; private set ; }
 	
+	/// <summary>
+	/// 死亡した時に呼ばれるイベント
+	/// </summary>
 	public event Action<GameCharacter> onDead;
 
+	/// <summary>
+	/// スーパー状態
+	/// </summary>
+	public bool isSuperMode { get; private set; }
+
+	/// <summary>
+	/// スーパー状態の残り時間
+	/// </summary>
+	/// <returns></returns>
+	public float superModeRemainTime { get; private set;}
+
 	private GameCarriedObject _carryingTarget;
-
-	void UpdateSprite()
-	{
-		Sprite s = null;
-
-		switch ((int)spriteIndex)
-		{
-			case 0:
-				s = _standSprite;
-				break;
-
-			case 1:
-				s = _walk1Sprite;
-				break;
-
-			case 2:
-				s = _walk2Sprite;
-				break;
-
-			default:
-				s = _standSprite;
-				break;
-		}
-		_spriteRederer.sprite = s;
-	}
 
 	void Awake()
 	{
@@ -129,6 +122,16 @@ public class GameCharacter : GameCarriedObject
 			_carryingTarget.transform.position = transform.position + Vector3.left /2;
 		}
 
+		if (isSuperMode)
+		{
+			superModeRemainTime -= Time.deltaTime;
+			if (superModeRemainTime <= 0)
+			{
+				superModeRemainTime = -1;
+				isSuperMode = false;
+			}
+		}
+
 		ProcessLifeTime();
 	}
 
@@ -147,6 +150,31 @@ public class GameCharacter : GameCarriedObject
 			_hair.transform.localScale = new Vector3(1, rate, 1);
 			_hairFireRoot.position = new Vector3(_hairFireRoot.position.x, _hair.bounds.max.y, _hairFireRoot.position.z);
 		}
+	}
+
+	void UpdateSprite()
+	{
+		Sprite s = null;
+
+		switch ((int)spriteIndex)
+		{
+			case 0:
+				s = _standSprite;
+				break;
+
+			case 1:
+				s = _walk1Sprite;
+				break;
+
+			case 2:
+				s = _walk2Sprite;
+				break;
+
+			default:
+				s = _standSprite;
+				break;
+		}
+		_spriteRederer.sprite = s;
 	}
 
 	public void SetUp(Const.Side side)
@@ -208,18 +236,36 @@ public class GameCharacter : GameCarriedObject
 		}
 	}
 
+	private void StartSuperMode()
+	{
+		isSuperMode = true;
+		superModeRemainTime = Setting.superModeTime;
+	}
+
 	private void EatFood(GameFood food)
 	{
 		if (food.isCarried) return;
+		
+		switch (food.foodType)
+		{
+			case Const.FoodType.Super:
+				StartSuperMode();
+				break;
+
+			case Const.FoodType.Egg:
+				LayEgg();
+				break;
+		}
+
 		Eat(Setting.expEatFood, Setting.layEggCountEatFood);
 		food.OnEat();
 	}
 
 	private void EatCharacter(GameCharacter character)
 	{
-		if (character.side == this.side || character.isCarried) return;
+		if (character.side == this.side || character.isCarried || this.isCarried || character.isSuperMode) return;
 
-		if (this.level > character.level)
+		if (this.level > character.level || this.isSuperMode)
 		{
 			Eat(Setting.expEatCharacter, Setting.layEggCountEatCharacter);
 			character.Kill();
@@ -242,7 +288,6 @@ public class GameCharacter : GameCarriedObject
 
 		if (_levelData.layEggCount <= currentLayEggCount && _levelData.layEggCount > 0)
 		{
-			currentLayEggCount = 0;
 			LayEgg();
 		}
 
@@ -267,6 +312,7 @@ public class GameCharacter : GameCarriedObject
 
 	private void LayEgg()
 	{
+		currentLayEggCount = 0;
 		GameManager.instance.GenerateEgg(transform.position.x, transform.position.y, side);
 	}
 
