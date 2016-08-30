@@ -17,6 +17,12 @@ public class GameCharacter : GameCarriedObject
 	[SerializeField]
 	private float _speed;
 
+	[SerializeField]
+	private SpriteRenderer _hair;
+
+	[SerializeField]
+	private Transform _hairFireRoot;
+
 	private Rigidbody2D _rigidbody2D;
 
 	private CharacterLevelData _levelData;
@@ -48,11 +54,19 @@ public class GameCharacter : GameCarriedObject
 	/// </summary>
 	/// <returns></returns>
 	public int currentLayEggCount { get; private set; }
-	
 
+	public float maxLifeTime { get; private set; }
+
+	/// <summary>
+	/// 寿命までの残り時間
+	/// </summary>
+	/// <returns></returns>
+	public float lifeTime { get; private set ; }
+	
 	public event Action<GameCharacter> onDead;
 
 	private GameCarriedObject _carryingTarget;
+
 
 
 	void Awake()
@@ -63,6 +77,9 @@ public class GameCharacter : GameCarriedObject
 		_levelData = Setting.characterLevels[0];
 		_nextLevelData = Setting.characterLevels[1];
 
+		maxLifeTime = Setting.characterMaxLifeTime;
+		lifeTime = maxLifeTime;
+
 		UpdateSize();
 	}
 
@@ -71,6 +88,25 @@ public class GameCharacter : GameCarriedObject
 		if (_carryingTarget != null)
 		{
 			_carryingTarget.transform.position = transform.position + Vector3.left /2;
+		}
+
+		ProcessLifeTime();
+	}
+
+	void ProcessLifeTime()
+	{
+		lifeTime -= Time.deltaTime;
+
+		if (lifeTime < 0)
+		{
+			Kill();
+		}
+		else
+		{
+			var rate = lifeTime / maxLifeTime;
+			
+			_hair.transform.localScale = new Vector3(1, rate, 1);
+			_hairFireRoot.position = new Vector3(_hairFireRoot.position.x, _hair.bounds.max.y, _hairFireRoot.position.z);
 		}
 	}
 

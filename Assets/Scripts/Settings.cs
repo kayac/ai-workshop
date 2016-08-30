@@ -10,4 +10,6 @@ public static class Setting
 			new CharacterLevelData(level: 3, exp: 10, layEggCount: 10),
 		}
 	);
+
+	public const float characterMaxLifeTime = 60f;
 }
