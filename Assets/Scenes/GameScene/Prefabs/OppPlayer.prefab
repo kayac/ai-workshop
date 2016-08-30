@@ -11,6 +11,7 @@ GameObject:
   - 114: {fileID: 11432374}
   - 50: {fileID: 50000011102079514}
   - 58: {fileID: 58000014252833986}
+  - 95: {fileID: 95000011126901722}
   m_Layer: 8
   m_Name: OppPlayer
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 171338}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000010488168454}
@@ -43,8 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0576418f6e81476098fb2e7e0c4b543, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spriteRederer: {fileID: 212000010083445192}
+  _standSprite: {fileID: 21300000, guid: 92b7a440bd2284cd7be55d5964ffc1b0, type: 3}
+  _walk1Sprite: {fileID: 21300000, guid: 33af5488fef6f4397849406de92f4c5f, type: 3}
+  _walk2Sprite: {fileID: 21300000, guid: 34c023f3f96d24e6e9e17c62f286903b, type: 3}
   _speed: 3
   _hair: {fileID: 212000013543316540}
+  spriteIndex: 0
   _hairFireRoot: {fileID: 4000010125764374}
 --- !u!1001 &100100000
 Prefab:
@@ -97,7 +103,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000010488168454}
   - 212: {fileID: 212000010083445192}
-  - 95: {fileID: 95000010316016086}
   - 58: {fileID: 58000013060954520}
   m_Layer: 11
   m_Name: Sprite
@@ -161,7 +166,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012496139668}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.31190002, z: 0}
+  m_LocalPosition: {x: 0, y: 0.3125, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -282,16 +287,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.45
---- !u!95 &95000010316016086
+--- !u!95 &95000011126901722
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012086828146}
+  m_GameObject: {fileID: 171338}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 92882d4ea5aed4682a11ad9f7fbbc5b3, type: 2}
+  m_Controller: {fileID: 9100000, guid: a12625e9851d242938c659ce9c039159, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -343,7 +348,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 34c023f3f96d24e6e9e17c62f286903b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 92b7a440bd2284cd7be55d5964ffc1b0, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0

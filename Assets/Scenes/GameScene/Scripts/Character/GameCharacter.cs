@@ -7,8 +7,21 @@ using DG.Tweening;
 /// キャラクター
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
+[ExecuteInEditMode]
 public class GameCharacter : GameCarriedObject
 {
+
+	[SerializeField]
+	private SpriteRenderer _spriteRederer;
+
+	[SerializeField]
+	private Sprite _standSprite;
+
+	[SerializeField]
+	private Sprite _walk1Sprite;
+
+	[SerializeField]
+	private Sprite _walk2Sprite;
 
 	/// <summary>
 	/// 移動速度(毎秒あたり)
@@ -20,6 +33,8 @@ public class GameCharacter : GameCarriedObject
 	[SerializeField]
 	private SpriteRenderer _hair;
 
+	public float spriteIndex;
+
 	[SerializeField]
 	private Transform _hairFireRoot;
 
@@ -28,8 +43,7 @@ public class GameCharacter : GameCarriedObject
 	private CharacterLevelData _levelData;
 
 	private CharacterLevelData _nextLevelData;
-
-
+	
 	/// <summary>
 	/// 現在のレベル
 	/// </summary>
@@ -67,7 +81,30 @@ public class GameCharacter : GameCarriedObject
 
 	private GameCarriedObject _carryingTarget;
 
+	void UpdateSprite()
+	{
+		Sprite s = null;
 
+		switch ((int)spriteIndex)
+		{
+			case 0:
+				s = _standSprite;
+				break;
+
+			case 1:
+				s = _walk1Sprite;
+				break;
+
+			case 2:
+				s = _walk2Sprite;
+				break;
+
+			default:
+				s = _standSprite;
+				break;
+		}
+		_spriteRederer.sprite = s;
+	}
 
 	void Awake()
 	{
@@ -85,6 +122,8 @@ public class GameCharacter : GameCarriedObject
 
 	void Update()
 	{
+		UpdateSprite();
+
 		if (_carryingTarget != null)
 		{
 			_carryingTarget.transform.position = transform.position + Vector3.left /2;
@@ -172,7 +211,7 @@ public class GameCharacter : GameCarriedObject
 	private void EatFood(GameFood food)
 	{
 		if (food.isCarried) return;
-		AddExp(1);
+		Eat(Setting.expEatFood, Setting.layEggCountEatFood);
 		food.OnEat();
 	}
 
@@ -182,7 +221,7 @@ public class GameCharacter : GameCarriedObject
 
 		if (this.level > character.level)
 		{
-			AddExp(5);
+			Eat(Setting.expEatCharacter, Setting.layEggCountEatCharacter);
 			character.Kill();
 		}
 
@@ -191,15 +230,15 @@ public class GameCharacter : GameCarriedObject
 	private void EatEgg(GameEgg egg)
 	{
 		if (egg.side == this.side|| egg.isCarried) return;
-		AddExp(3);
+		Eat(Setting.expEatEgg, Setting.layEggCountEatEgg);
 		egg.OnEat();
 	}
 
-	private void AddExp(int add)
+	private void Eat(int addExp, int layEggCount)
 	{
-		this.exp += add;
+		this.exp += addExp;
 
-		currentLayEggCount += add;
+		currentLayEggCount += layEggCount;
 
 		if (_levelData.layEggCount <= currentLayEggCount && _levelData.layEggCount > 0)
 		{
@@ -268,16 +307,16 @@ public class GameCharacter : GameCarriedObject
 	public void StartCarry()
 	{
 		var mask = LayerMask.GetMask(Const.layerNameCharacter, Const.layerNameEgg, Const.layerNameFood);
-		var colliders = Physics.OverlapBox(transform.position, Vector3.one / 2, Quaternion.Euler(0, 0, 0), mask);
+		var colliders = Physics2D.OverlapBoxAll(transform.position, Vector3.one / 2, mask);
 		
-		var list = new List<Collider>(colliders);
+		var list = new List<Collider2D>(colliders);
 
-		list.Sort(delegate(Collider a, Collider b)
+		list.Sort(delegate(Collider2D a, Collider2D b)
 		{
 			return 
-				Vector3.Distance(a.transform.position, transform.position)
+				Vector2.Distance(a.transform.position, transform.position)
 				.CompareTo(
-				Vector3.Distance(b.transform.position, transform.position));
+				Vector2.Distance(b.transform.position, transform.position));
 		});
 
 		foreach (var col in list)

@@ -29,4 +29,34 @@ public static class Setting
 		// ここのクラスを変更するとゲーム開始時に使用するロジックが適用される
 		FoodGenerateLogicRandom
 	);
+
+	/// <summary>
+	/// 食べ物を食べた時に貰える経験値
+	/// </summary>
+	public const int expEatFood = 1;
+
+	/// <summary>
+	/// 卵を食べた時に貰える経験値
+	/// </summary>
+	public const int expEatEgg = 2;
+
+	/// <summary>
+	/// 敵を食べた時に貰える経験値
+	/// </summary>
+	public const int expEatCharacter = 5;
+
+	/// <summary>
+	/// 食べ物を食べた時に貰える産卵カウント
+	/// </summary>
+	public const int layEggCountEatFood = 1;
+
+	/// <summary>
+	/// 卵を食べた時に貰える産卵カウント
+	/// </summary>
+	public const int layEggCountEatEgg = 2;
+
+	/// <summary>
+	/// キャラクターを食べた時に貰える産卵カウント
+	/// </summary>
+	public const int layEggCountEatCharacter = 3;
 }

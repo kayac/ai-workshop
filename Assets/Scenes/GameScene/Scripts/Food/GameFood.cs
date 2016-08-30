@@ -3,6 +3,15 @@ using System.Collections;
 
 public class GameFood : GameCarriedObject
 {
+	[SerializeField]
+	private SpriteRenderer _renderer;
+	
+	public Const.FoodType foodType { get; private set; }
+
+	public void SetUp(Const.FoodType foodType)
+	{
+		this.foodType = foodType;
+	}
 
 	public override void OnCarriedStart(GameCharacter character)
 	{

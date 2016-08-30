@@ -32,6 +32,13 @@ public static class Const
 		River
 	}
 
+	public enum FoodType
+	{
+		Normal,
+		Super,
+		Egg
+	}
+
 	public const string layerNameCharacter	= "Character";
 	public const string layerNameFood 		= "Food";
 	public const string layerNameEgg		= "Egg";
