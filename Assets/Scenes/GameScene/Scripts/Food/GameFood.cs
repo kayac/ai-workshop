@@ -6,6 +6,15 @@ public class GameFood : GameCarriedObject
 	[SerializeField]
 	private SpriteRenderer _renderer;
 
+	[SerializeField]
+	private Sprite _normalSprite;
+
+	[SerializeField]
+	private Sprite _layEggSprite;
+
+	[SerializeField]
+	private Sprite _superSprite;
+
 	public Const.FoodType foodType { get; private set; }
 
 	void OnEnable()
@@ -16,6 +25,17 @@ public class GameFood : GameCarriedObject
 	public void SetUp(Const.FoodType foodType)
 	{
 		this.foodType = foodType;
+
+		var mySprite = _normalSprite;
+
+		switch(foodType)
+		{
+			case Const.FoodType.Normal: mySprite = _normalSprite; break;
+			case Const.FoodType.Egg   : mySprite = _layEggSprite; break;
+			case Const.FoodType.Super : mySprite = _superSprite; break;
+		}
+
+		_renderer.sprite = mySprite;
 	}
 
 	public void PlayAppear()

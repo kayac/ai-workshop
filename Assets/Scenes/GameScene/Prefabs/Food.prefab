@@ -43,6 +43,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 212000011622690342}
+  _normalSprite: {fileID: 21300000, guid: 4ef178975ae85443ea943321061dd6e1, type: 3}
+  _layEggSprite: {fileID: 21300000, guid: 73f5788683c394da886793ba3b64dcd3, type: 3}
+  _superSprite: {fileID: 21300000, guid: 438628d5a8efb4c5c96f6e219214b287, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
