@@ -10,7 +10,6 @@ using DG.Tweening;
 [ExecuteInEditMode]
 public class GameCharacter : GameCarriedObject
 {
-
 	[SerializeField]
 	private SpriteRenderer _spriteRederer;
 
