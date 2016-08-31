@@ -9,18 +9,71 @@ using DG.Tweening;
 [RequireComponent(typeof(Rigidbody2D))]
 [ExecuteInEditMode]
 public class GameCharacter : GameCarriedObject
-{
+{	
 	[SerializeField]
 	private SpriteRenderer _spriteRederer;
 
+	[Header("sprite index: 0")]
 	[SerializeField]
-	private Sprite _standSprite;
+	private Sprite _defaultStandSprite;
 
+	[Header("sprite index: 1")]
 	[SerializeField]
-	private Sprite _walk1Sprite;
+	private Sprite _defaultWalk1Sprite;
 
+	[Header("sprite index: 2")]
 	[SerializeField]
-	private Sprite _walk2Sprite;
+	private Sprite _defaultWalk2Sprite;
+
+	[Header("sprite index: 10")]
+	[SerializeField]
+	private Sprite _inhaleStandSprite;
+
+	[Header("sprite index: 11")]
+	[SerializeField]
+	private Sprite _inhaleWalk1Sprite;
+
+	[Header("sprite index: 12")]
+	[SerializeField]
+	private Sprite _inhaleWalk2Sprite;
+
+	[Header("sprite index: 20")]
+	[SerializeField]
+	private Sprite _chewStand1Sprite;
+
+	[Header("sprite index: 21")]
+	[SerializeField]
+	private Sprite _chewStand2Sprite;
+
+	[Header("sprite index: 22")]
+	[SerializeField]
+	private Sprite _chewWalk1Sprite;
+
+	[Header("sprite index: 23")]
+	[SerializeField]
+	private Sprite _chewWalk2Sprite;
+
+	[Header("sprite index: 30")]
+	[SerializeField]
+	private Sprite _carryStandSptire;
+
+	[Header("sprite index: 31")]
+	[SerializeField]
+	private Sprite _carryWalk1Sprite;
+
+	[Header("sprite index: 32")]
+	[SerializeField]
+	private Sprite _carryWalk2Sprite;
+
+	[Header("sprite index: 40")]
+	[SerializeField]
+	private Sprite _carriedSprite;
+
+	[Header("sprite index: 50")]
+	[SerializeField]
+	private Sprite _deadSprite;
+
+
 	
 	[SerializeField]
 	private SpriteRenderer _hair;
@@ -162,21 +215,28 @@ public class GameCharacter : GameCarriedObject
 
 		switch ((int)spriteIndex)
 		{
-			case 0:
-				s = _standSprite;
-				break;
+			case 0: s = _defaultStandSprite; break;
+			case 1: s = _defaultWalk1Sprite; break;
+			case 2: s = _defaultWalk2Sprite; break;
 
-			case 1:
-				s = _walk1Sprite;
-				break;
+			case 10: s = _inhaleStandSprite; break;
+			case 11: s = _inhaleWalk1Sprite; break;
+			case 12: s = _inhaleWalk2Sprite; break;
 
-			case 2:
-				s = _walk2Sprite;
-				break;
+			case 20: s = _chewStand1Sprite; break;
+			case 21: s = _chewStand2Sprite; break;
+			case 22: s = _chewWalk1Sprite; break;
+			case 23: s = _chewWalk2Sprite; break;
 
-			default:
-				s = _standSprite;
-				break;
+			case 30: s = _carryStandSptire; break;
+			case 31: s = _carryWalk1Sprite; break;
+			case 32: s = _carryWalk2Sprite; break;
+
+			case 40: s = _carriedSprite; break;
+
+			case 50: s = _deadSprite; break;
+
+			default: s = _defaultStandSprite; break;
 		}
 		_spriteRederer.sprite = s;
 	}
