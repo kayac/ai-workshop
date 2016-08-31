@@ -22,6 +22,12 @@ public class GameCharacter : GameCarriedObject
 
 	[SerializeField]
 	private Sprite _walk2Sprite;
+	
+	[SerializeField]
+	private SpriteRenderer _hair;
+
+	[SerializeField]
+	private ParticleSystem _superModeParticle;
 
 	/// <summary>
 	/// 移動速度(毎秒あたり)
@@ -30,8 +36,6 @@ public class GameCharacter : GameCarriedObject
 	[SerializeField]
 	private float _speed;
 
-	[SerializeField]
-	private SpriteRenderer _hair;
 
 	public float spriteIndex;
 
@@ -129,6 +133,7 @@ public class GameCharacter : GameCarriedObject
 			{
 				superModeRemainTime = -1;
 				isSuperMode = false;
+				_superModeParticle.gameObject.SetActive(false);
 			}
 		}
 
@@ -240,6 +245,7 @@ public class GameCharacter : GameCarriedObject
 	{
 		isSuperMode = true;
 		superModeRemainTime = Setting.superModeTime;
+		_superModeParticle.gameObject.SetActive(true);
 	}
 
 	private void EatFood(GameFood food)
@@ -306,8 +312,11 @@ public class GameCharacter : GameCarriedObject
 
 	private void UpdateSize()
 	{
-		var rate = (float)1f / (float)Setting.characterLevels.Count;
-		transform.localScale = Vector3.one * rate * _levelData.level;
+		if (Application.isPlaying)
+		{
+			var rate = (float)1f / (float)Setting.characterLevels.Count;
+			transform.localScale = Vector3.one * rate * _levelData.level;
+		}
 	}
 
 	private void LayEgg()
