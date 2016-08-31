@@ -65,6 +65,7 @@ public class GameCharacterController : MonoBehaviour
 		else
 		{
 			_prevKeyCode = null;
+			_character.CancenMove();
 		}
 	}
 

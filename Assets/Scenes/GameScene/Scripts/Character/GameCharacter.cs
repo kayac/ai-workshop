@@ -10,6 +10,17 @@ using DG.Tweening;
 [ExecuteInEditMode]
 public class GameCharacter : GameCarriedObject
 {	
+	private enum Status
+	{
+		Default,
+		Inhale,
+		Chew,
+		Carry,
+		Carried,
+		Dead
+	}
+
+	#region GameObject
 	[SerializeField]
 	private SpriteRenderer _spriteRederer;
 
@@ -72,14 +83,17 @@ public class GameCharacter : GameCarriedObject
 	[Header("sprite index: 50")]
 	[SerializeField]
 	private Sprite _deadSprite;
-
-
 	
 	[SerializeField]
 	private SpriteRenderer _hair;
 
 	[SerializeField]
 	private ParticleSystem _superModeParticle;
+
+	[SerializeField]
+	private Transform _hairFireRoot;
+
+	#endregion
 
 	/// <summary>
 	/// 移動速度(毎秒あたり)
@@ -88,13 +102,15 @@ public class GameCharacter : GameCarriedObject
 	[SerializeField]
 	private float _speed;
 
-
+	/// <summary>
+	/// 表示するスプライトの番号
+	/// タイムラインアニメーションから操作できるようにパブリックになってます
+	/// </summary>
 	public float spriteIndex;
 
-	[SerializeField]
-	private Transform _hairFireRoot;
-
 	private Rigidbody2D _rigidbody2D;
+
+	private Animator _animator;
 
 	private CharacterLevelData _levelData;
 
@@ -153,11 +169,20 @@ public class GameCharacter : GameCarriedObject
 	/// <returns></returns>
 	public float superModeRemainTime { get; private set;}
 
+	/// <summary>
+	/// 現在運搬しているモノ
+	/// </summary>
 	private GameCarriedObject _carryingTarget;
 
+	private Status _status;
+
+	private bool _isMoving;
+	
 	void Awake()
 	{
 		_rigidbody2D = GetComponent<Rigidbody2D>();
+		_animator = GetComponent<Animator>();
+
 		exp = 0;
 
 		_levelData = Setting.characterLevels[0];
@@ -192,6 +217,7 @@ public class GameCharacter : GameCarriedObject
 		ProcessLifeTime();
 	}
 
+
 	void ProcessLifeTime()
 	{
 		lifeTime -= Time.deltaTime;
@@ -209,11 +235,16 @@ public class GameCharacter : GameCarriedObject
 		}
 	}
 
-	void UpdateSprite()
+	/// <summary>
+	/// スプライトの表示を更新する
+	/// </summary>
+	private void UpdateSprite()
 	{
 		Sprite s = null;
 
-		switch ((int)spriteIndex)
+		var i = Mathf.RoundToInt(spriteIndex);
+
+		switch (i)
 		{
 			case 0: s = _defaultStandSprite; break;
 			case 1: s = _defaultWalk1Sprite; break;
@@ -238,42 +269,187 @@ public class GameCharacter : GameCarriedObject
 
 			default: s = _defaultStandSprite; break;
 		}
-		_spriteRederer.sprite = s;
+
+		if (_spriteRederer.sprite != s)  _spriteRederer.sprite = s;
+	}
+
+	private void ChangeAnimation(Status status)
+	{
+		ChangeAnimation(status, _isMoving);
+	}
+
+	private void ChangeAnimation(bool isMoving)
+	{
+		ChangeAnimation(_status, isMoving);
+	}
+
+	private void ChangeAnimation(Status status, bool isMoving)
+	{
+		if (_status == status && _isMoving == isMoving)
+		{
+			return;
+		}
+
+		_status = status;
+		_isMoving = isMoving;
+
+		switch (_status)
+		{
+			case Status.Default:
+				if (_isMoving)
+				{
+					_animator.Play("DefaultWalk");
+				}
+				else
+				{
+					_animator.Play("DefaultStand");
+				}
+				return;
+
+			case Status.Inhale:
+				if (_isMoving)
+				{
+					_animator.Play("InhaleWalk");
+				}
+				else
+				{
+					_animator.Play("InhaleStand");
+				}
+				return;
+
+			case Status.Chew:
+				if (_isMoving)
+				{
+					_animator.Play("ChewWalk");
+				}
+				else
+				{
+					_animator.Play("ChewStand");
+				}
+				return;
+
+			case Status.Carry:
+				if (_isMoving)
+				{
+					_animator.Play("CarryWalk");
+				}
+				else
+				{
+					_animator.Play("CarryStand");
+				}
+				return;
+
+			case Status.Carried:
+				_animator.Play("Carried");
+				return;
+
+			case Status.Dead:
+				_animator.Play("Dead");
+				return;
+		}
+	}
+
+	/// <summary>
+	/// レベルに応じてサイズを変える
+	/// </summary>
+	private void UpdateSize()
+	{
+		if (Application.isPlaying)
+		{
+			var rate = (float)1f / (float)Setting.characterLevels.Count;
+			transform.localScale = Vector3.one * rate * _levelData.level;
+		}
 	}
 
 	public void SetUp(Const.Side side)
 	{
 		this.side = side;
 	}
-
+	
+	/// <summary>
+	/// 移動
+	/// </summary>
+	/// <param name="direction"></param>
 	public void Move(Vector3 direction)
 	{
 		if (isCarried) return;
 		_rigidbody2D.MovePosition(transform.position + direction);
+
+		ChangeAnimation(true);
 	}
 
+	/// <summary>
+	/// 上に移動
+	/// </summary>
 	public void MoveUp()
 	{
 		if (isCarried) return;
 		Move(Vector3.up * _speed * Time.fixedDeltaTime);
 	}
 
+	/// <summary>
+	/// 下に移動
+	/// </summary>
 	public void MoveDown()
 	{
 		if (isCarried) return;
 		Move(Vector3.down * _speed * Time.fixedDeltaTime);
 	}
 
+	/// <summary>
+	/// 左に移動
+	/// </summary>
 	public void MoveLeft()
 	{
 		if (isCarried) return;
 		Move(Vector3.left * _speed * Time.fixedDeltaTime);
 	}
 
+	/// <summary>
+	/// 右に移動
+	/// </summary>
 	public void MoveRight()
 	{
 		if (isCarried) return;
 		Move(Vector3.right * _speed * Time.fixedDeltaTime);
+	}
+
+	public void CancenMove()
+	{
+		ChangeAnimation(false);
+	}
+
+
+		/// <summary>
+	/// ある地点に向かって移動する
+	/// </summary>
+	/// <param name="position"></param>
+	/// <param name="onComplete"></param>
+	public void MoveTo(Vector3 position, Action onComplete = null)
+	{
+		if (isCarried)
+		{
+			onComplete();
+			return;
+		}
+
+		var distance = Vector3.Distance(position, this.transform.position);
+		var duration = distance / _speed;
+
+		_rigidbody2D.DOMove(position, duration, false)
+		.SetEase(Ease.Linear)
+		.OnComplete(
+			() =>
+			{
+				if (onComplete != null)
+				{
+					onComplete();
+				}
+				ChangeAnimation(false);
+			}
+		);
+
+		ChangeAnimation(true);
 	}
 
 	void OnTriggerEnter2D(Collider2D other)
@@ -300,6 +476,9 @@ public class GameCharacter : GameCarriedObject
 		}
 	}
 
+	/// <summary>
+	/// スーパー状態を開始する
+	/// </summary>
 	private void StartSuperMode()
 	{
 		isSuperMode = true;
@@ -307,6 +486,10 @@ public class GameCharacter : GameCarriedObject
 		_superModeParticle.gameObject.SetActive(true);
 	}
 
+	/// <summary>
+	/// 食べ物を食べる
+	/// </summary>
+	/// <param name="food"></param>
 	private void EatFood(GameFood food)
 	{
 		if (food.isCarried) return;
@@ -326,6 +509,10 @@ public class GameCharacter : GameCarriedObject
 		food.OnEat();
 	}
 
+	/// <summary>
+	/// キャラクターを食べる
+	/// </summary>
+	/// <param name="character"></param>
 	private void EatCharacter(GameCharacter character)
 	{
 		if (character.side == this.side || character.isCarried || this.isCarried || character.isSuperMode) return;
@@ -338,6 +525,10 @@ public class GameCharacter : GameCarriedObject
 
 	}
 
+	/// <summary>
+	/// 卵を食べる
+	/// </summary>
+	/// <param name="egg"></param>
 	private void EatEgg(GameEgg egg)
 	{
 		if (egg.side == this.side|| egg.isCarried) return;
@@ -345,6 +536,11 @@ public class GameCharacter : GameCarriedObject
 		egg.OnEat();
 	}
 
+	/// <summary>
+	/// 食べる処理
+	/// </summary>
+	/// <param name="addExp"></param>
+	/// <param name="layEggCount"></param>
 	private void Eat(int addExp, int layEggCount)
 	{
 		this.exp += addExp;
@@ -369,21 +565,18 @@ public class GameCharacter : GameCarriedObject
 		}
 	}
 
-	private void UpdateSize()
-	{
-		if (Application.isPlaying)
-		{
-			var rate = (float)1f / (float)Setting.characterLevels.Count;
-			transform.localScale = Vector3.one * rate * _levelData.level;
-		}
-	}
-
+	/// <summary>
+	/// 卵を産む
+	/// </summary>
 	private void LayEgg()
 	{
 		currentLayEggCount = 0;
 		GameManager.instance.GenerateEgg(transform.position.x, transform.position.y, side);
 	}
 
+	/// <summary>
+	/// 殺す
+	/// </summary>
 	public void Kill()
 	{
 		if (onDead != null)
@@ -394,30 +587,11 @@ public class GameCharacter : GameCarriedObject
 		Destroy(this.gameObject);
 	}
 
-	public void MoveTo(Vector3 position, Action onComplete = null)
-	{
-		if (isCarried)
-		{
-			onComplete();
-			return;
-		}
 
-		var distance = Vector3.Distance(position, this.transform.position);
-		var duration = distance / _speed;
 
-		_rigidbody2D.DOMove(position, duration, false)
-		.SetEase(Ease.Linear)
-		.OnComplete(
-			() =>
-			{
-				if (onComplete != null)
-				{
-					onComplete();
-				}
-			}
-		);
-	}
-
+	/// <summary>
+	/// 運搬を開始する
+	/// </summary>
 	public void StartCarry()
 	{
 		var mask = LayerMask.GetMask(Const.layerNameCharacter, Const.layerNameEgg, Const.layerNameFood);
@@ -445,35 +619,59 @@ public class GameCharacter : GameCarriedObject
 				{
 					character.OnCarriedStart(this);
 					_carryingTarget = character;
+					ChangeAnimation(Status.Carry);
 					return;
 				}
 			}
-
-			var obj = col.GetComponent<GameCarriedObject>();
-
-			if (obj != null)
+			else
 			{
-				obj.OnCarriedStart(this);
-				_carryingTarget = obj;
+
+				var obj = col.GetComponent<GameCarriedObject>();
+
+				if (obj != null)
+				{
+					obj.OnCarriedStart(this);
+					_carryingTarget = obj;
+					ChangeAnimation(Status.Carry);
+				}
 			}
 		}
 	}
 
+	/// <summary>
+	/// 運搬を終了する
+	/// </summary>
 	public void EndCarry()
 	{
 		if (_carryingTarget == null) return;
 		_carryingTarget.OnCarriedEnd(this);
 		_carryingTarget = null;
+		ChangeAnimation(Status.Default);
 	}
 
+	public bool IsCarring()
+	{
+		return _carryingTarget != null;
+	}
+
+	/// <summary>
+	/// 運搬された時に呼ばれる
+	/// </summary>
+	/// <param name="character"></param>
 	public override void OnCarriedStart(GameCharacter character)
 	{
 		isCarried = true;
 		_rigidbody2D.Sleep();
+		ChangeAnimation(Status.Carried);
 	}
 
+	/// <summary>
+	/// 運搬され終わった時に呼ばれる
+	/// </summary>
+	/// <param name="character"></param>
 	public override void OnCarriedEnd(GameCharacter character)
 	{
 		isCarried = false;
+		ChangeAnimation(Status.Default);
 	}
 }

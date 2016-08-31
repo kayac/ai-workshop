@@ -13,7 +13,7 @@ GameObject:
   - 58: {fileID: 58000011157257360}
   - 95: {fileID: 95000010668427612}
   m_Layer: 8
-  m_Name: OwnPlayer
+  m_Name: OwnCharacter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,9 +66,9 @@ MonoBehaviour:
   _deadSprite: {fileID: 21300000, guid: a1f65e38787754d8db20026a9be17ecd, type: 3}
   _hair: {fileID: 212000013984311414}
   _superModeParticle: {fileID: 198000011217101862}
+  _hairFireRoot: {fileID: 4000011424109288}
   _speed: 3
   spriteIndex: 0
-  _hairFireRoot: {fileID: 4000011424109288}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

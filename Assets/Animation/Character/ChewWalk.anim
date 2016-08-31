@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: CharacterWalk
+  m_Name: ChewWalk
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,19 +20,19 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - time: 0
-        value: 1
+        value: 22
         inSlope: 6
         outSlope: 6
         tangentMode: 10
       - time: 0.16666667
-        value: 2
-        inSlope: 3
-        outSlope: 3
-        tangentMode: 10
-      - time: 0.33333334
-        value: 2
+        value: 23
         inSlope: 0
         outSlope: 0
+        tangentMode: 10
+      - time: 0.33333334
+        value: 22
+        inSlope: -6
+        outSlope: -6
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -81,19 +81,19 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - time: 0
-        value: 1
+        value: 22
         inSlope: 6
         outSlope: 6
         tangentMode: 10
       - time: 0.16666667
-        value: 2
-        inSlope: 3
-        outSlope: 3
-        tangentMode: 10
-      - time: 0.33333334
-        value: 2
+        value: 23
         inSlope: 0
         outSlope: 0
+        tangentMode: 10
+      - time: 0.33333334
+        value: 22
+        inSlope: -6
+        outSlope: -6
         tangentMode: 10
       m_PreInfinity: 2
       m_PostInfinity: 2
