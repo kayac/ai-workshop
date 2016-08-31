@@ -232,7 +232,7 @@ public class GameCharacter : GameCarriedObject
 
 		if (lifeTime < 0)
 		{
-			Kill();
+			EndLife();
 		}
 		else
 		{
@@ -622,12 +622,12 @@ public class GameCharacter : GameCarriedObject
 	/// </summary>
 	public void Kill()
 	{
+		this.enabled = false;
+		GetComponent<Collider2D>().enabled = false;
 		if (onDead != null)
 		{
 			onDead(this);
 		}
-
-		Destroy(this.gameObject);
 	}
 
 
@@ -637,6 +637,8 @@ public class GameCharacter : GameCarriedObject
 	/// </summary>
 	public void StartCarry()
 	{
+		if (_carryingTarget != null) return;
+
 		var mask = LayerMask.GetMask(Const.layerNameCharacter, Const.layerNameEgg, Const.layerNameFood);
 		var colliders = Physics2D.OverlapBoxAll(transform.position, Vector3.one / 2, mask);
 		
@@ -749,5 +751,38 @@ public class GameCharacter : GameCarriedObject
 		Gizmos.color = Color.blue;
 
 		Gizmos.DrawWireSphere(GetCarryWorldPosition(), 0.25f);
+	}
+
+	[ContextMenu("EndLifeDebug")]
+	private void EndLife()
+	{
+		Kill();
+		ChangeAnimation(Status.Dead);
+
+		_spriteRederer.DOColor(new Color(1, 1, 1, 0), 1f).OnComplete(() =>
+		{
+			Destroy(gameObject);
+		});
+	}
+	
+
+	public void OnEat(GameCharacter character)
+	{
+		
+
+		transform.position = new Vector3(
+			transform.position.x,
+			transform.position.y,
+			Const.eatAnimationStartPositionZ
+		);
+
+		var duration = 0.25f;
+
+		transform.DOMove(character.GetInhaleWorldPosition(), duration).OnComplete(()=>
+		{
+			Destroy(this.gameObject);
+		});
+
+		Kill();
 	}
 }
