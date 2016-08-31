@@ -54,8 +54,25 @@ public class GameFood : GameCarriedObject
 		isCarried = false;
 	}
 
-	public void OnEat()
+	public void OnEat(GameCharacter character)
 	{
-		Destroy(this.gameObject);
+		
+		this.enabled = false;
+		GetComponent<Collider2D>().enabled = false;
+
+		transform.position = new Vector3(
+			transform.position.x,
+			transform.position.y,
+			Const.eatAnimationStartPositionZ
+		);
+
+		var duration = 0.25f;
+
+		transform.DOMove(character.GetInhaleWorldPosition(), duration).OnComplete(()=>
+		{
+			Destroy(this.gameObject);
+		});
+
+		transform.DOScale(Vector3.zero, duration);
 	}
 }

@@ -67,6 +67,8 @@ MonoBehaviour:
   _hair: {fileID: 212000013984311414}
   _superModeParticle: {fileID: 198000011217101862}
   _hairFireRoot: {fileID: 4000011424109288}
+  _inhaleLocalPosition: {x: -0.2, y: 0.05, z: 0.2}
+  _carryLocalPosition: {x: -0.5, y: 0.05, z: -0.1}
   _speed: 3
   spriteIndex: 0
 --- !u!1001 &100100000

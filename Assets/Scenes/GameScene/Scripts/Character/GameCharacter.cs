@@ -93,6 +93,12 @@ public class GameCharacter : GameCarriedObject
 	[SerializeField]
 	private Transform _hairFireRoot;
 
+	[SerializeField]
+	private Vector3 _inhaleLocalPosition;
+
+	[SerializeField]
+	private Vector3 _carryLocalPosition;
+
 	#endregion
 
 	/// <summary>
@@ -177,6 +183,8 @@ public class GameCharacter : GameCarriedObject
 	private Status _status;
 
 	private bool _isMoving;
+
+	private bool _isLeft = true;
 	
 	void Awake()
 	{
@@ -200,7 +208,7 @@ public class GameCharacter : GameCarriedObject
 
 		if (_carryingTarget != null)
 		{
-			_carryingTarget.transform.position = transform.position + Vector3.left /2;
+			_carryingTarget.transform.position = GetCarryWorldPosition();
 		}
 
 		if (isSuperMode)
@@ -403,6 +411,7 @@ public class GameCharacter : GameCarriedObject
 	{
 		if (isCarried) return;
 		Move(Vector3.left * _speed * Time.fixedDeltaTime);
+		ChangeDirection(true);
 	}
 
 	/// <summary>
@@ -412,6 +421,8 @@ public class GameCharacter : GameCarriedObject
 	{
 		if (isCarried) return;
 		Move(Vector3.right * _speed * Time.fixedDeltaTime);
+
+		ChangeDirection(false);
 	}
 
 	public void CancenMove()
@@ -436,6 +447,11 @@ public class GameCharacter : GameCarriedObject
 		var distance = Vector3.Distance(position, this.transform.position);
 		var duration = distance / _speed;
 
+		if (position.x < transform.position.x)
+		{
+
+		}
+
 		_rigidbody2D.DOMove(position, duration, false)
 		.SetEase(Ease.Linear)
 		.OnComplete(
@@ -450,6 +466,14 @@ public class GameCharacter : GameCarriedObject
 		);
 
 		ChangeAnimation(true);
+	}
+
+	private void ChangeDirection(bool isLeft)
+	{
+		_isLeft = isLeft;
+
+		_spriteRederer.transform.localRotation = Quaternion.Euler(
+			0, _isLeft ? 0f : 180f, 0);
 	}
 
 	void OnTriggerEnter2D(Collider2D other)
@@ -506,7 +530,7 @@ public class GameCharacter : GameCarriedObject
 		}
 
 		Eat(Setting.expEatFood, Setting.layEggCountEatFood);
-		food.OnEat();
+		food.OnEat(this);
 	}
 
 	/// <summary>
@@ -563,6 +587,25 @@ public class GameCharacter : GameCarriedObject
 
 			UpdateSize();
 		}
+
+		CancelInvoke("WaitInhale");
+		CancelInvoke("EndChew");
+
+		ChangeAnimation(Status.Inhale);
+		
+		Invoke("WaitInhale", 0.25f);
+	}
+
+	private void WaitInhale()
+	{
+		CancelInvoke("EndChew");
+		ChangeAnimation(Status.Chew);
+		Invoke("EndChew", 1f);
+	}
+
+	private void EndChew()
+	{
+		ChangeAnimation(Status.Default);
 	}
 
 	/// <summary>
@@ -673,5 +716,38 @@ public class GameCharacter : GameCarriedObject
 	{
 		isCarried = false;
 		ChangeAnimation(Status.Default);
+	}
+	
+	public Vector3 GetInhaleWorldPosition()
+	{
+		var p = new Vector3(
+			_isLeft ? _inhaleLocalPosition.x : -_inhaleLocalPosition.x,
+			_inhaleLocalPosition.y,
+			_inhaleLocalPosition.z
+		);
+
+		return transform.TransformPoint(p);
+	}
+
+	public Vector3 GetCarryWorldPosition()
+	{
+		var p = new Vector3(
+			_isLeft ? _carryLocalPosition.x : -_carryLocalPosition.x,
+			_carryLocalPosition.y,
+			_carryLocalPosition.z
+		);
+
+		return transform.TransformPoint(p);
+	}
+
+	void OnDrawGizmos()
+	{
+		Gizmos.color = Color.red;
+
+		Gizmos.DrawWireSphere(GetInhaleWorldPosition(), 0.25f);
+
+		Gizmos.color = Color.blue;
+
+		Gizmos.DrawWireSphere(GetCarryWorldPosition(), 0.25f);
 	}
 }

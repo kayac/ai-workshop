@@ -12,6 +12,8 @@ public static class Const
 	public const float characterPositionZ = 0f;
 	public const float foodPositionZ = 0.2f;
 	public const float eggPositionZ = 0.1f;
+	public const float eatAnimationStartPositionZ = -0.2f;
+	public const float carriedPositionZ = -0.3f;
 
 	public enum Side
 	{
