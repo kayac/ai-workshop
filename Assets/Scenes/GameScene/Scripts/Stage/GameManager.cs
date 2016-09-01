@@ -57,6 +57,15 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	private Text _resultText;
 
+	[SerializeField]
+	private ImageNumber _timeNumber;
+
+	[SerializeField]
+	private ImageNumber _ownScoreNumber;
+
+	[SerializeField]
+	private ImageNumber _oppScoreNumber;
+
 	private GameCharacter _playerCharacter;
 
 	private int _selectingOwnCharacterIndex;
@@ -111,13 +120,15 @@ public class GameManager : MonoBehaviour
 
 		_gameTime -= Time.deltaTime;
 
-		_timeText.text = ((int)_gameTime).ToString();
+		var gt = (int)_gameTime;
 
-		_scoreText.text = string.Format(
-			"{0} vs {1}",
-			ownCharacters.Count,
-			oppCharacters.Count
-		);
+		if (gt >=0)
+		{
+			_timeNumber.number = gt;
+		}
+
+		_ownScoreNumber.number = ownCharacters.Count;
+		_oppScoreNumber.number = oppCharacters.Count;
 
 		if (_gameTime <= 0)
 		{
