@@ -49,15 +49,6 @@ public class GameManager : MonoBehaviour
 	private GameObject _foodPrefab;
 
 	[SerializeField]
-	private Text _timeText;
-
-	[SerializeField]
-	private Text _scoreText;
-
-	[SerializeField]
-	private Text _resultText;
-
-	[SerializeField]
 	private ImageNumber _timeNumber;
 
 	[SerializeField]
@@ -65,6 +56,18 @@ public class GameManager : MonoBehaviour
 
 	[SerializeField]
 	private ImageNumber _oppScoreNumber;
+
+	[SerializeField]
+	private GameObject _winTextRoot;
+
+	[SerializeField]
+	private GameObject _loseTextRoot;
+
+	[SerializeField]
+	private GameObject _drawTextRoot;
+
+	[SerializeField]
+	private GameObject _selectNewCharacterRoot;
 
 	private GameCharacter _playerCharacter;
 
@@ -139,23 +142,18 @@ public class GameManager : MonoBehaviour
 
 	private void OnEndGameTime()
 	{
-		string str = "";
-
 		if (ownCharacters.Count == oppCharacters.Count)
 		{
-			str = "DRAW";
+			_drawTextRoot.SetActive(true);
 		}
 		else if (ownCharacters.Count > oppCharacters.Count)
 		{
-			str = "YOU WIN";
+			_winTextRoot.SetActive(true);
 		}
 		else
 		{
-			str = "YOU LOSE";
+			_loseTextRoot.SetActive(true);
 		}
-
-		_resultText.text = str;
-		_resultText.gameObject.SetActive(true);
 	}
 
 	private void ProcessPlay()
@@ -194,6 +192,7 @@ public class GameManager : MonoBehaviour
 			SetUpPlayerCharacter(c);
 			_mode = Const.Mode.Play;
 			Time.timeScale = 1f;
+			_selectNewCharacterRoot.SetActive(false);
 		}
 
 		
@@ -261,6 +260,14 @@ public class GameManager : MonoBehaviour
 	{
 		_playerCharacter = character;
 		_playerCharacter.gameObject.AddComponent<GameCharacterController>();
+
+		var aiList = _playerCharacter.GetComponents<GameCharacterAIBase>();
+
+		foreach (var ai in aiList)
+		{
+			Destroy(ai);
+		}
+
 		_playerCharacter.onDead += OnDeadPlayerCharacter;
 	}
 
@@ -397,10 +404,17 @@ public class GameManager : MonoBehaviour
 	{
 		character.onDead -= OnDeadPlayerCharacter;
 
-		_playerCharacter = null;
+		var ctrl = _playerCharacter.GetComponent<GameCharacterController>();
+		Destroy(ctrl);
 
-		SelectPlayerCharacter();
+		_playerCharacter = null;
 		
+		Invoke("StartSelectPlayerCharacter", 1f);
+	}
+
+	private void StartSelectPlayerCharacter()
+	{
+		SelectPlayerCharacter();
 	}
 
 	public void SelectPlayerCharacter()
@@ -409,6 +423,7 @@ public class GameManager : MonoBehaviour
 
 		_selectingOwnCharacterIndex = 0;
 		_mode = Const.Mode.CharacterSelect;
+		_selectNewCharacterRoot.SetActive(true);
 	}
 
 

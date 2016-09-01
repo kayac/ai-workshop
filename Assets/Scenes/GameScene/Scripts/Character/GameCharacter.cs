@@ -544,7 +544,7 @@ public class GameCharacter : GameCarriedObject
 		if (this.level > character.level || this.isSuperMode)
 		{
 			Eat(Setting.expEatCharacter, Setting.layEggCountEatCharacter);
-			character.Kill();
+			character.OnEat(this);
 		}
 
 	}
@@ -624,6 +624,14 @@ public class GameCharacter : GameCarriedObject
 	{
 		this.enabled = false;
 		GetComponent<Collider2D>().enabled = false;
+		
+		var aiList = GetComponents<GameCharacterAIBase>();
+
+		foreach (var ai in aiList)
+		{
+			Destroy(ai);
+		}
+
 		if (onDead != null)
 		{
 			onDead(this);
@@ -768,7 +776,7 @@ public class GameCharacter : GameCarriedObject
 
 	public void OnEat(GameCharacter character)
 	{
-		
+		DOTween.Kill(transform, false);
 
 		transform.position = new Vector3(
 			transform.position.x,
@@ -776,12 +784,14 @@ public class GameCharacter : GameCarriedObject
 			Const.eatAnimationStartPositionZ
 		);
 
-		var duration = 0.25f;
+		var duration = 0.5f;
 
 		transform.DOMove(character.GetInhaleWorldPosition(), duration).OnComplete(()=>
 		{
 			Destroy(this.gameObject);
 		});
+
+		transform.DOScale(Vector3.zero, duration);
 
 		Kill();
 	}
