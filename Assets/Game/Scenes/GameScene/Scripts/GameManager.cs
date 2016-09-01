@@ -116,7 +116,15 @@ public class GameManager : MonoBehaviour
 
 	void Update()
 	{
-		if (isGameOver) return;
+		if (isGameOver)
+		{
+
+			if (Input.GetKeyDown(KeyCode.Space))
+			{
+				UnityEngine.SceneManagement.SceneManager.LoadScene("TitleScene");
+			}
+			return;
+		}
 
 		switch (_mode)
 		{

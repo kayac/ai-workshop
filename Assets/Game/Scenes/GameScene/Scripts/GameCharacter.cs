@@ -564,7 +564,7 @@ public class GameCharacter : GameCarriedObject
 	{
 		if (egg.side == this.side|| egg.isCarried) return;
 		Eat(Setting.expEatEgg, Setting.layEggCountEatEgg);
-		egg.OnEat();
+		egg.OnEat(this);
 	}
 
 	/// <summary>

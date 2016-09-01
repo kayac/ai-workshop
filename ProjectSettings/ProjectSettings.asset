@@ -341,7 +341,7 @@ PlayerSettings:
   psp2InfoBarColor: 0
   psp2UseDebugIl2cppLibs: 0
   psmSplashimage: {fileID: 0}
-  spritePackerPolicy: 
+  spritePackerPolicy: TightPackerPolicy
   scriptingDefineSymbols: {}
   metroPackageName: ai-workshop
   metroPackageVersion: 

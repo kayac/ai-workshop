@@ -46,23 +46,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spriteRederer: {fileID: 212000010083445192}
-  _defaultStandSprite: {fileID: 21300000, guid: 634e2bb1fd3bb4b2682d084909da749d,
+  _defaultStandSprite: {fileID: 21300000, guid: d9a27388eb7234cb89a17b51abaff2bd,
     type: 3}
-  _defaultWalk1Sprite: {fileID: 21300000, guid: a6b4bf49688844268b4f8c0a0458b6a3,
+  _defaultWalk1Sprite: {fileID: 21300000, guid: 29f060e3612134d1d809c91be5968450,
     type: 3}
-  _defaultWalk2Sprite: {fileID: 21300000, guid: 64d164c7aeed740efb16746b3935c777,
+  _defaultWalk2Sprite: {fileID: 21300000, guid: a21f51f7bbd3f4b8eb0314340e037303,
     type: 3}
-  _inhaleStandSprite: {fileID: 21300000, guid: b2b90c3c17b574187b2b847ede2dbaaa, type: 3}
-  _inhaleWalk1Sprite: {fileID: 21300000, guid: f805ebec7185f4641b0183aa6c82a6dd, type: 3}
-  _inhaleWalk2Sprite: {fileID: 21300000, guid: eb20ba12f672740848b053ba51ffabb7, type: 3}
-  _chewStand1Sprite: {fileID: 21300000, guid: e41f8fa4d8e044536bd80fcf36a79682, type: 3}
-  _chewStand2Sprite: {fileID: 21300000, guid: 6a4783637edf14363aa91ad525afebe6, type: 3}
-  _chewWalk1Sprite: {fileID: 21300000, guid: f90102b4c77e74463904a2ae981994b1, type: 3}
-  _chewWalk2Sprite: {fileID: 21300000, guid: 88f54a7fcf120498f88fce6625fb3f44, type: 3}
-  _carryStandSptire: {fileID: 21300000, guid: e0dff0a9ebe2741a0a4a89573902c066, type: 3}
-  _carryWalk1Sprite: {fileID: 21300000, guid: a48fa09f1d5c447a28a83bd8ec274f74, type: 3}
-  _carryWalk2Sprite: {fileID: 21300000, guid: ba6ab88dd468c482ba0f0c24c0a2e560, type: 3}
-  _carriedSprite: {fileID: 21300000, guid: 5adb64de5c373411696e90d81c511594, type: 3}
+  _inhaleStandSprite: {fileID: 21300000, guid: 76b939ffe6e5a4edcb60fd4b58c92c97, type: 3}
+  _inhaleWalk1Sprite: {fileID: 21300000, guid: 3980fc604b4b543a88c6ac4152c72d06, type: 3}
+  _inhaleWalk2Sprite: {fileID: 21300000, guid: ab8897b560ec3494f8b26b83c77eefcd, type: 3}
+  _chewStand1Sprite: {fileID: 21300000, guid: 06ad55e0ccbb44697805c847923f7660, type: 3}
+  _chewStand2Sprite: {fileID: 21300000, guid: 700a1902e6d4148258825b6b8ce38a47, type: 3}
+  _chewWalk1Sprite: {fileID: 21300000, guid: 052e1dc47eae141b5a19182acb6aa480, type: 3}
+  _chewWalk2Sprite: {fileID: 21300000, guid: 6bfcba963994b48399a5819269b52e47, type: 3}
+  _carryStandSptire: {fileID: 21300000, guid: d8d3a7cdd659b49dcaf46f543e8ec6b0, type: 3}
+  _carryWalk1Sprite: {fileID: 21300000, guid: caf66ca4140e84fd99df043815a2aa9e, type: 3}
+  _carryWalk2Sprite: {fileID: 21300000, guid: 2e5533c8876df48a88ec3462d3afac6f, type: 3}
+  _carriedSprite: {fileID: 21300000, guid: e2af47050f38e445db0ad87c16156546, type: 3}
   _deadSprite: {fileID: 21300000, guid: a1f65e38787754d8db20026a9be17ecd, type: 3}
   _hair: {fileID: 212000013543316540}
   _superModeParticle: {fileID: 198000011292211572}
@@ -129,7 +129,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1000012086828146
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,7 +161,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1000013249808840
 GameObject:
   m_ObjectHideFlags: 1
@@ -2194,8 +2194,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 634e2bb1fd3bb4b2682d084909da749d, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: d9a27388eb7234cb89a17b51abaff2bd, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
 --- !u!212 &212000012782333870

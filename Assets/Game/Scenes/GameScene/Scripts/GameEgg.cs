@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using DG.Tweening;
 /// <summary>
 /// 卵 : 一定時間で孵化する
 /// </summary>
@@ -81,9 +81,26 @@ public class GameEgg : GameCarriedObject
 		}
 	}
 
-	public void OnEat()
+	public void OnEat(GameCharacter character)
 	{
-		Destroy(this.gameObject);
+		DOTween.Kill(transform, false);
+
+		transform.position = new Vector3(
+			transform.position.x,
+			transform.position.y,
+			Const.eatAnimationStartPositionZ
+		);
+
+		var duration = 0.25f;
+
+		transform.DOMove(character.GetInhaleWorldPosition(), duration).OnComplete(()=>
+		{
+			Destroy(this.gameObject);
+		});
+
+		transform.DOScale(transform.localScale / 2, duration);
+
+		this.enabled = false;
 	}
 
 	private void OnHatch()
