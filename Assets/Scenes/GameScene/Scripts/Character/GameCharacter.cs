@@ -199,6 +199,9 @@ public class GameCharacter : GameCarriedObject
 		maxLifeTime = Setting.characterMaxLifeTime;
 		lifeTime = maxLifeTime;
 
+		_hair.gameObject.SetActive(Setting.isEnableLifeTime);
+		_hairFireRoot.gameObject.SetActive(Setting.isEnableLifeTime);
+
 		UpdateSize();
 	}
 
@@ -228,6 +231,8 @@ public class GameCharacter : GameCarriedObject
 
 	void ProcessLifeTime()
 	{
+		if (!Setting.isEnableLifeTime) return;
+
 		lifeTime -= Time.deltaTime;
 
 		if (lifeTime < 0)
@@ -784,14 +789,14 @@ public class GameCharacter : GameCarriedObject
 			Const.eatAnimationStartPositionZ
 		);
 
-		var duration = 0.5f;
+		var duration = 0.25f;
 
 		transform.DOMove(character.GetInhaleWorldPosition(), duration).OnComplete(()=>
 		{
 			Destroy(this.gameObject);
 		});
 
-		transform.DOScale(Vector3.zero, duration);
+		transform.DOScale(transform.localScale / 2, duration);
 
 		Kill();
 	}

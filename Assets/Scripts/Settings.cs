@@ -15,6 +15,12 @@ public static class Setting
 		}
 	);
 
+
+	/// <summary>
+	/// キャラクターに寿命をもたせるか
+	/// </summary>
+	public static bool isEnableLifeTime = false;
+
 	/// <summary>
 	/// キャラクターの最大寿命(秒)
 	/// </summary>
