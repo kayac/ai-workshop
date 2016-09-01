@@ -55,6 +55,9 @@ public class GameManager : MonoBehaviour
 	private ImageNumber _oppScoreNumber;
 
 	[SerializeField]
+	private GameObject _resultRoot;
+
+	[SerializeField]
 	private GameObject _winTextRoot;
 
 	[SerializeField]
@@ -113,6 +116,8 @@ public class GameManager : MonoBehaviour
 
 	void Update()
 	{
+		if (isGameOver) return;
+
 		switch (_mode)
 		{
 			case Const.Mode.Play:
@@ -148,6 +153,8 @@ public class GameManager : MonoBehaviour
 		if (isGameOver) return;
 		
 		isGameOver = true;
+
+		_resultRoot.SetActive(true);
 
 		if (ownCharacters.Count == oppCharacters.Count)
 		{

@@ -15,7 +15,7 @@ public static class Setting
 		}
 	);
 
-	public const float gameTime = 20;
+	public const float gameTime = 10;
 
 	/// <summary>
 	/// キャラクターに寿命をもたせるか

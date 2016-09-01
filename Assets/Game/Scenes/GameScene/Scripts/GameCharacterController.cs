@@ -36,6 +36,8 @@ public class GameCharacterController : MonoBehaviour
 
 	private void ProcessMove()
 	{
+		if (GameManager.instance.isGameOver) return;
+
 		if (Input.GetKey(KeyCode.UpArrow)
 			|| Input.GetKey(KeyCode.DownArrow)
 			|| Input.GetKey(KeyCode.LeftArrow)

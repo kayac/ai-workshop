@@ -48,7 +48,16 @@ public class FoodGenerateLogicRandom : FoodGenerateLogicBase
 					var isGenerate = Random.Range(0, _generateRate) == 0;
 					if (isGenerate)
 					{
-						GameManager.instance.GenerateFood(x, y, Const.FoodType.Super);
+
+						var r = Random.Range(0, 10);
+
+						var myFoodType = Const.FoodType.Normal;
+
+						if (r == 0) myFoodType = Const.FoodType.Super;
+
+						if (r == 1 || r == 2) myFoodType = Const.FoodType.Egg;
+
+						GameManager.instance.GenerateFood(x, y, myFoodType);
 					}
 				}
 			}
