@@ -46,12 +46,12 @@ public class GameFood : GameCarriedObject
 
 	public override void OnCarriedStart(GameCharacter character)
 	{
-		isCarried = true;
+		carringCharacter = character;
 	}
 
 	public override void OnCarriedEnd(GameCharacter character)
 	{
-		isCarried = false;
+		carringCharacter = null;
 	}
 
 	public void OnEat(GameCharacter character)

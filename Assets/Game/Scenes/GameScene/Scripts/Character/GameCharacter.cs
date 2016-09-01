@@ -483,6 +483,8 @@ public class GameCharacter : GameCarriedObject
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
+		if (isCarried || _carryingTarget != null) return;
+
 		var food = other.GetComponent<GameFood>();
 
 		if (food != null)
@@ -581,6 +583,13 @@ public class GameCharacter : GameCarriedObject
 			LayEgg();
 		}
 
+		CancelInvoke("WaitInhale");
+		CancelInvoke("EndChew");
+
+		ChangeAnimation(Status.Inhale);
+		
+		Invoke("WaitInhale", 0.25f);
+
 		if (_nextLevelData == null) return;
 
 		int nextExp = _nextLevelData.exp;
@@ -592,13 +601,7 @@ public class GameCharacter : GameCarriedObject
 
 			UpdateSize();
 		}
-
-		CancelInvoke("WaitInhale");
-		CancelInvoke("EndChew");
-
-		ChangeAnimation(Status.Inhale);
 		
-		Invoke("WaitInhale", 0.25f);
 	}
 
 	private void WaitInhale()
@@ -718,7 +721,7 @@ public class GameCharacter : GameCarriedObject
 	/// <param name="character"></param>
 	public override void OnCarriedStart(GameCharacter character)
 	{
-		isCarried = true;
+		carringCharacter = character;
 		_rigidbody2D.Sleep();
 		ChangeAnimation(Status.Carried);
 	}
@@ -729,7 +732,7 @@ public class GameCharacter : GameCarriedObject
 	/// <param name="character"></param>
 	public override void OnCarriedEnd(GameCharacter character)
 	{
-		isCarried = false;
+		carringCharacter = null;
 		ChangeAnimation(Status.Default);
 	}
 	

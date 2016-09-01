@@ -4,7 +4,8 @@ using System.Collections;
 public abstract class GameCarriedObject : MonoBehaviour
 {
 
-	public bool isCarried { get; protected set; }
+	public GameCharacter carringCharacter { get; protected set; }
+	public bool isCarried { get { return carringCharacter != null; } }
 
 	public abstract void OnCarriedStart(GameCharacter character);
 	public abstract void OnCarriedEnd(GameCharacter character);

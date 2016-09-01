@@ -7,9 +7,6 @@ public class GameManager : MonoBehaviour
 	public static GameManager instance { get; private set ; }
 
 	[SerializeField]
-	private float _gameTime = 10f;
-
-	[SerializeField]
 	private int _mapSizeX = 10;
 
 	public int mapSizeX { get { return _mapSizeX; } }
@@ -85,6 +82,10 @@ public class GameManager : MonoBehaviour
 
 	private FoodGenerateLogicBase _foodGenerateLogic;
 
+	public float gameTime { get; private set; }
+
+	public bool isGameOver { get; private set; }
+
 	void Awake()
 	{	
 		if (instance != null)
@@ -92,6 +93,8 @@ public class GameManager : MonoBehaviour
 			DestroyImmediate(this.gameObject);
 			return;
 		}
+
+		gameTime = Setting.gameTime;
 
 		_foodGenerateLogic = gameObject.AddComponent(Setting.foodGenerateLogicType) as FoodGenerateLogicBase;
 
@@ -121,9 +124,9 @@ public class GameManager : MonoBehaviour
 				break;
 		}
 
-		_gameTime -= Time.deltaTime;
+		gameTime -= Time.deltaTime;
 
-		var gt = (int)_gameTime;
+		var gt = (int)gameTime;
 
 		if (gt >=0)
 		{
@@ -133,7 +136,7 @@ public class GameManager : MonoBehaviour
 		_ownScoreNumber.number = ownCharacters.Count;
 		_oppScoreNumber.number = oppCharacters.Count;
 
-		if (_gameTime <= 0)
+		if (gameTime <= 0)
 		{
 			OnEndGameTime();
 		}
@@ -142,6 +145,10 @@ public class GameManager : MonoBehaviour
 
 	private void OnEndGameTime()
 	{
+		if (isGameOver) return;
+		
+		isGameOver = true;
+
 		if (ownCharacters.Count == oppCharacters.Count)
 		{
 			_drawTextRoot.SetActive(true);

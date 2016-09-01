@@ -90,17 +90,23 @@ public class GameEgg : GameCarriedObject
 	{
 		_animator.speed = 1;
 		_animator.Play("Hatch");
+
+		if (carringCharacter != null)
+		{
+			carringCharacter.EndCarry();
+		}
+
 		Destroy(this.gameObject, 2);
 		this.enabled = false;
 	}
 
 	public override void OnCarriedStart(GameCharacter character)
 	{
-		isCarried = true;
+		carringCharacter = character;
 	}
 
 	public override void OnCarriedEnd(GameCharacter character)
 	{
-		isCarried = false;
+		carringCharacter = null;
 	}
 }
