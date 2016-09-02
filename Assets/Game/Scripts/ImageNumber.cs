@@ -8,6 +8,9 @@ public class ImageNumber : MonoBehaviour
 	[SerializeField]
 	private List<Sprite> _sprites = new List<Sprite>();
 	
+	[SerializeField]
+	private Color _color = Color.white;
+
 	private List<Image> _images = new List<Image>();
 
 	public int number;
@@ -60,6 +63,7 @@ public class ImageNumber : MonoBehaviour
 				
 				image.sprite = _sprites[n];
 				image.transform.localScale = Vector3.one;
+				image.color = _color;
 			}
 			catch(System.NullReferenceException e)
 			{
