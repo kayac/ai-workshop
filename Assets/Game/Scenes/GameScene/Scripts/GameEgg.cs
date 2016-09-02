@@ -74,7 +74,7 @@ public class GameEgg : GameCarriedObject
 			
 			if (hatchTime <= _currentTime)
 			{
-				GameManager.instance.GenerateCharacter(transform.position.x, transform.position.y, side);
+				GameManager.instance.OnHatchEgg(this);
 				alreadyHatch = true;
 				OnHatch();
 			}

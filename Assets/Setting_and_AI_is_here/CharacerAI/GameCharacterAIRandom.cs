@@ -16,6 +16,8 @@ public class GameCharacterAIRandom : GameCharacterAIBase
 
 	private IEnumerator CoRandom()
 	{
+		yield return new WaitForSeconds(2);
+
 		while (enabled)
 		{
 			var isComplete = false;

@@ -385,7 +385,7 @@ public class GameManager : MonoBehaviour
 	/// 卵が孵化した際に呼ばれる
 	/// </summary>
 	/// <param name="egg"></param>
-	private void OnHatchEgg(GameEgg egg)
+	public void OnHatchEgg(GameEgg egg)
 	{
 		var character = GenerateCharacter((int)egg.transform.position.x, (int)egg.transform.position.y, egg.side);
 		character.gameObject.AddComponent<GameCharacterAIRandom>();
