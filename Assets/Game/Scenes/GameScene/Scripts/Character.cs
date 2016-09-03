@@ -118,15 +118,30 @@ public class Character : CarriedObject
 
 	private Animator _animator;
 
+
+	
 	private CharacterLevelData _levelData;
 
-	private CharacterLevelData _nextLevelData;
+	/// <summary>
+	/// 現在のレベルのマスタ
+	/// </summary>
+	/// <returns></returns>
+	public CharacterLevelData levelData { get { return _levelData; } }	
 	
 	/// <summary>
-	/// 現在のレベル
+	/// 現在のレベル(数値)
 	/// </summary>
 	/// <returns></returns>
 	public int level { get { return _levelData.level; }} 
+
+	private CharacterLevelData _nextLevelData;
+
+	/// <summary>
+	/// 次のレベル
+	//	レベルが最大まで達した場合、nullになる
+	/// </summary>
+	/// <returns></returns>
+	public CharacterLevelData nextLevelData { get { return _nextLevelData; } }
 
 	/// <summary>
 	/// 現在の経験値
@@ -179,11 +194,20 @@ public class Character : CarriedObject
 	/// 現在運搬しているモノ
 	/// </summary>
 	private CarriedObject _carryingTarget;
-
+	
+	/// <summary>
+	/// 現在の状態
+	/// </summary>
 	private Status _status;
 
+	/// <summary>
+	/// 移動中か
+	/// </summary>
 	private bool _isMoving;
 
+	/// <summary>
+	/// 左向きか
+	/// </summary>
 	private bool _isLeft = true;
 	
 	void Awake()
