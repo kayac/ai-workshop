@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class FoodGenerateLogicBase : MonoBehaviour
+public abstract class FoodGeneraterBase : MonoBehaviour
 {
 	/// <summary>
 	/// マップ生成後に呼ばれる

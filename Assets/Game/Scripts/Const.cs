@@ -41,6 +41,21 @@ public static class Const
 		Egg
 	}
 
+	public enum GameStagePreset
+	{
+		StageGround,
+		StageWall,
+		StageRiver,
+		CharacterPlayer,
+		ChatacterOwn,
+		CharacterOpp,
+		FoodNormal,
+		FoodSuper,
+		FoodEgg,
+		EggOwn,
+		EggOpp
+	}
+
 	public const string layerNameCharacter	= "Character";
 	public const string layerNameFood 		= "Food";
 	public const string layerNameEgg		= "Egg";

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class FoodGenerateLogicRandom : FoodGenerateLogicBase
+public class FoodGeneraterRandom : FoodGeneraterBase
 {
 	private float _currentTime;
 

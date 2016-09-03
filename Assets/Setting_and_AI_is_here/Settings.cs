@@ -18,7 +18,12 @@ public static class Setting
 
 	public static readonly Type foodGenerateLogicType = typeof(
 		// ここのクラスを変更するとゲーム開始時に使用するロジックが適用される
-		FoodGenerateLogicRandom
+		FoodGeneraterRandom
+	);
+
+	public static readonly Type mapGenerateLogicType = typeof(
+		// ここのクラスを変更するとマップ生成ロジックを適用することができる
+		MapGeneratorRandom
 	);
 
 	

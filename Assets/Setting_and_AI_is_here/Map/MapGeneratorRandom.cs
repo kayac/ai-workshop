@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MapGeneratorRandom : GameMapGeneratorBase
+public class MapGeneratorRandom : MapGeneratorBase
 {
 	public override MapCell[,] Generate(int sizeX, int sizeY)
 	{

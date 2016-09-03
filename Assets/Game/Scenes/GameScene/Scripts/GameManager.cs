@@ -83,7 +83,9 @@ public class GameManager : MonoBehaviour
 
 	private Const.Mode _mode;
 
-	private FoodGenerateLogicBase _foodGenerateLogic;
+	private MapGeneratorBase _mapGenerater;
+
+	private FoodGeneraterBase _foodGenerater;
 
 	public float gameTime { get; private set; }
 
@@ -97,11 +99,12 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 
-		gameTime = Setting.gameTime;
-
-		_foodGenerateLogic = gameObject.AddComponent(Setting.foodGenerateLogicType) as FoodGenerateLogicBase;
 
 		instance = this;
+		gameTime = Setting.gameTime;
+
+		_foodGenerater = gameObject.AddComponent(Setting.foodGenerateLogicType) as FoodGeneraterBase;
+		_mapGenerater =  gameObject.AddComponent(Setting.mapGenerateLogicType) as MapGeneratorBase;
 
 		ownCharacters = new List<Character>();
 		oppCharacters = new List<Character>();
@@ -237,8 +240,7 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	private void InitMap()
 	{
-		var generator = GetComponent<GameMapGeneratorBase>();
-		map = generator.Generate(_mapSizeX, _mapSizeY);
+		map = _mapGenerater.Generate(_mapSizeX, _mapSizeY);
 
 		for (int x = 0; x < _mapSizeX; x++)
 		{
@@ -328,7 +330,7 @@ public class GameManager : MonoBehaviour
 
 	private void InitFoods()
 	{
-		_foodGenerateLogic.OnInit();
+		_foodGenerater.OnInit();
 	}
 
 	/// <summary>
