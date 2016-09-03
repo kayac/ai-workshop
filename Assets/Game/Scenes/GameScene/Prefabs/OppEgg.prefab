@@ -12,7 +12,7 @@ GameObject:
   - 114: {fileID: 11450286}
   - 58: {fileID: 58000012716803026}
   - 95: {fileID: 95000013111108552}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: OppEgg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
