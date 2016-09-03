@@ -85,6 +85,8 @@ public class GameEgg : GameCarriedObject
 	{
 		DOTween.Kill(transform, false);
 
+		GameManager.instance.OnEatEgg(this);
+
 		transform.position = new Vector3(
 			transform.position.x,
 			transform.position.y,

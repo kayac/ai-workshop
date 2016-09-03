@@ -56,7 +56,7 @@ public class GameFood : GameCarriedObject
 
 	public void OnEat(GameCharacter character)
 	{
-		
+		GameManager.instance.OnEatFood(this);
 		this.enabled = false;
 		GetComponent<Collider2D>().enabled = false;
 

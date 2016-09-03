@@ -378,6 +378,7 @@ public class GameManager : MonoBehaviour
 		var egg = Instantiate<GameEgg>(prefab);
 		egg.transform.position = new Vector3(x, y, Const.eggPositionZ);
 		egg.SetUp(side);
+		eggs.Add(egg);
 		return egg;
 	}
 
@@ -388,7 +389,13 @@ public class GameManager : MonoBehaviour
 	public void OnHatchEgg(GameEgg egg)
 	{
 		var character = GenerateCharacter(egg.transform.position.x, egg.transform.position.y, egg.side);
+		eggs.Remove(egg);
 		character.gameObject.AddComponent<GameCharacterAIRandom>();
+	}
+
+	public void OnEatEgg(GameEgg egg)
+	{
+		eggs.Remove(egg);
 	}
 
 	/// <summary>
@@ -405,7 +412,7 @@ public class GameManager : MonoBehaviour
 		go.transform.parent = transform;
 
 		var food = go.GetComponent<GameFood>();
-
+		foods.Add(food);
 		food.SetUp(foodType);
 	}
 
@@ -420,6 +427,11 @@ public class GameManager : MonoBehaviour
 		{
 			OnEndGameTime();
 		}
+	}
+
+	public void OnEatFood(GameFood food)
+	{
+		foods.Remove(food);
 	}
 
 	public void OnDeadPlayerCharacter(GameCharacter character)
@@ -447,7 +459,5 @@ public class GameManager : MonoBehaviour
 		_mode = Const.Mode.CharacterSelect;
 		_selectNewCharacterRoot.SetActive(true);
 	}
-
-
 
 }
