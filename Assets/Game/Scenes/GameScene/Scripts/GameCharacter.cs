@@ -365,12 +365,21 @@ public class GameCharacter : GameCarriedObject
 	/// <summary>
 	/// レベルに応じてサイズを変える
 	/// </summary>
-	private void UpdateSize()
+	private void UpdateSize(bool withAnimation = false)
 	{
-		if (Application.isPlaying)
+		var rate = (float)1f / (float)Setting.characterLevels.Count;
+		var scale = Vector3.one * rate * _levelData.level;
+
+		if (withAnimation)
 		{
-			var rate = (float)1f / (float)Setting.characterLevels.Count;
-			transform.localScale = Vector3.one * rate * _levelData.level;
+			transform.DOScale(scale, 0.5f).SetEase(Ease.OutElastic);
+		}
+		else
+		{
+			if (Application.isPlaying)
+			{
+				transform.localScale = scale;
+			}
 		}
 	}
 
@@ -599,7 +608,7 @@ public class GameCharacter : GameCarriedObject
 			_levelData = _nextLevelData;
 			_nextLevelData = Setting.characterLevels.Find(m => m.level > _levelData.level);
 
-			UpdateSize();
+			UpdateSize(true);
 		}
 		
 	}
