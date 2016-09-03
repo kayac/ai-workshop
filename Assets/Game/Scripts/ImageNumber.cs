@@ -48,7 +48,6 @@ public class ImageNumber : MonoBehaviour
 
 		for (int i = 0; i < _images.Count; i++)
 		{
-			
 			try
 			{
 				var image = _images[i];
