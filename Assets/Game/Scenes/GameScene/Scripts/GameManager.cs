@@ -319,7 +319,10 @@ public class GameManager : MonoBehaviour
 
 			var character = GenerateCharacter(x, y, side);
 
-			character.gameObject.AddComponent<GameCharacterAIRandom>();
+			character.gameObject.AddComponent(
+				character.side == Const.Side.Own ?
+				Setting.ownCharacterAIType : Setting.oppCharacterAIType
+			);
 		}
 	}
 
@@ -400,7 +403,10 @@ public class GameManager : MonoBehaviour
 	{
 		var character = GenerateCharacter(egg.transform.position.x, egg.transform.position.y, egg.side);
 		eggs.Remove(egg);
-		character.gameObject.AddComponent<GameCharacterAIRandom>();
+		character.gameObject.AddComponent(
+			character.side == Const.Side.Own ?
+				Setting.ownCharacterAIType : Setting.oppCharacterAIType
+			);
 	}
 
 	public void OnEatEgg(Egg egg)
