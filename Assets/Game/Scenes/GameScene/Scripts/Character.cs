@@ -8,7 +8,7 @@ using DG.Tweening;
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [ExecuteInEditMode]
-public class GameCharacter : GameCarriedObject
+public class Character : CarriedObject
 {	
 	private enum Status
 	{
@@ -162,7 +162,7 @@ public class GameCharacter : GameCarriedObject
 	/// <summary>
 	/// 死亡した時に呼ばれるイベント
 	/// </summary>
-	public event Action<GameCharacter> onDead;
+	public event Action<Character> onDead;
 
 	/// <summary>
 	/// スーパー状態
@@ -178,7 +178,7 @@ public class GameCharacter : GameCarriedObject
 	/// <summary>
 	/// 現在運搬しているモノ
 	/// </summary>
-	private GameCarriedObject _carryingTarget;
+	private CarriedObject _carryingTarget;
 
 	private Status _status;
 
@@ -494,21 +494,21 @@ public class GameCharacter : GameCarriedObject
 	{
 		if (isCarried || _carryingTarget != null) return;
 
-		var food = other.GetComponent<GameFood>();
+		var food = other.GetComponent<Food>();
 
 		if (food != null)
 		{
 			EatFood(food);
 		}
 
-		var character = other.GetComponentInParent<GameCharacter>();
+		var character = other.GetComponentInParent<Character>();
 
 		if (character != null)
 		{
 			EatCharacter(character);
 		}
 
-		var egg = other.GetComponent<GameEgg>();
+		var egg = other.GetComponent<Egg>();
 
 		if (egg != null)
 		{
@@ -530,7 +530,7 @@ public class GameCharacter : GameCarriedObject
 	/// 食べ物を食べる
 	/// </summary>
 	/// <param name="food"></param>
-	private void EatFood(GameFood food)
+	private void EatFood(Food food)
 	{
 		if (food.isCarried) return;
 		
@@ -553,7 +553,7 @@ public class GameCharacter : GameCarriedObject
 	/// キャラクターを食べる
 	/// </summary>
 	/// <param name="character"></param>
-	private void EatCharacter(GameCharacter character)
+	private void EatCharacter(Character character)
 	{
 		if (character.side == this.side || character.isCarried || this.isCarried || character.isSuperMode) return;
 
@@ -569,7 +569,7 @@ public class GameCharacter : GameCarriedObject
 	/// 卵を食べる
 	/// </summary>
 	/// <param name="egg"></param>
-	private void EatEgg(GameEgg egg)
+	private void EatEgg(Egg egg)
 	{
 		if (egg.side == this.side|| egg.isCarried) return;
 		Eat(Setting.expEatEgg, Setting.layEggCountEatEgg);
@@ -642,7 +642,7 @@ public class GameCharacter : GameCarriedObject
 		this.enabled = false;
 		GetComponent<Collider2D>().enabled = false;
 		
-		var aiList = GetComponents<GameCharacterAIBase>();
+		var aiList = GetComponents<CharacterAIBase>();
 
 		foreach (var ai in aiList)
 		{
@@ -681,7 +681,7 @@ public class GameCharacter : GameCarriedObject
 		{
 			if (col.gameObject == this.gameObject) continue;
 
-			var character = col.GetComponent<GameCharacter>();
+			var character = col.GetComponent<Character>();
 
 			if (character != null)
 			{
@@ -696,7 +696,7 @@ public class GameCharacter : GameCarriedObject
 			else
 			{
 
-				var obj = col.GetComponent<GameCarriedObject>();
+				var obj = col.GetComponent<CarriedObject>();
 
 				if (obj != null)
 				{
@@ -728,7 +728,7 @@ public class GameCharacter : GameCarriedObject
 	/// 運搬された時に呼ばれる
 	/// </summary>
 	/// <param name="character"></param>
-	public override void OnCarriedStart(GameCharacter character)
+	public override void OnCarriedStart(Character character)
 	{
 		carringCharacter = character;
 		_rigidbody2D.Sleep();
@@ -739,7 +739,7 @@ public class GameCharacter : GameCarriedObject
 	/// 運搬され終わった時に呼ばれる
 	/// </summary>
 	/// <param name="character"></param>
-	public override void OnCarriedEnd(GameCharacter character)
+	public override void OnCarriedEnd(Character character)
 	{
 		carringCharacter = null;
 		ChangeAnimation(Status.Default);
@@ -791,7 +791,7 @@ public class GameCharacter : GameCarriedObject
 	}
 	
 
-	public void OnEat(GameCharacter character)
+	public void OnEat(Character character)
 	{
 		DOTween.Kill(transform, false);
 

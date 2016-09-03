@@ -4,7 +4,7 @@ using DG.Tweening;
 /// <summary>
 /// 卵 : 一定時間で孵化する
 /// </summary>
-public class GameEgg : GameCarriedObject
+public class Egg : CarriedObject
 {
 	
 	[SerializeField]
@@ -81,7 +81,7 @@ public class GameEgg : GameCarriedObject
 		}
 	}
 
-	public void OnEat(GameCharacter character)
+	public void OnEat(Character character)
 	{
 		DOTween.Kill(transform, false);
 
@@ -119,12 +119,12 @@ public class GameEgg : GameCarriedObject
 		this.enabled = false;
 	}
 
-	public override void OnCarriedStart(GameCharacter character)
+	public override void OnCarriedStart(Character character)
 	{
 		carringCharacter = character;
 	}
 
-	public override void OnCarriedEnd(GameCharacter character)
+	public override void OnCarriedEnd(Character character)
 	{
 		carringCharacter = null;
 	}

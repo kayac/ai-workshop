@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
 	public int mapSizeY { get { return _mapSizeY; } }
 
-	public GameMapCell[,] map { get; private set ; }
+	public MapCell[,] map { get; private set ; }
 
 	[SerializeField]
 	private Transform _cameraRoot;
@@ -28,10 +28,10 @@ public class GameManager : MonoBehaviour
 	private GameObject _characterOppPrefab;
 
 	[SerializeField]
-	private GameEgg _eggOwnPrefab;
+	private Egg _eggOwnPrefab;
 
 	[SerializeField]
-	private GameEgg _eggOppPrefab;
+	private Egg _eggOppPrefab;
 
 	[SerializeField]
 	private GameObject _groundPrefab;
@@ -69,17 +69,17 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	private GameObject _selectNewCharacterRoot;
 
-	private GameCharacter _playerCharacter;
+	private Character _playerCharacter;
 
 	private int _selectingOwnCharacterIndex;
 
-	public List<GameCharacter> ownCharacters { get; private set; }
+	public List<Character> ownCharacters { get; private set; }
 	
-	public List<GameCharacter> oppCharacters { get; private set; }
+	public List<Character> oppCharacters { get; private set; }
 
-	public List<GameFood> foods { get; private set; }
+	public List<Food> foods { get; private set; }
 
-	public List<GameEgg> eggs { get; private set ; }
+	public List<Egg> eggs { get; private set ; }
 
 	private Const.Mode _mode;
 
@@ -103,8 +103,10 @@ public class GameManager : MonoBehaviour
 
 		instance = this;
 
-		ownCharacters = new List<GameCharacter>();
-		oppCharacters = new List<GameCharacter>();
+		ownCharacters = new List<Character>();
+		oppCharacters = new List<Character>();
+		foods = new List<Food>();
+		eggs = new List<Egg>();
 
 		InitMap();
 		InitPlayerCharacter();
@@ -112,6 +114,14 @@ public class GameManager : MonoBehaviour
 		InitFoods();
 
 		_mode= Const.Mode.Play;
+	}
+
+	void OnDestroy()
+	{
+		if (instance == this)
+		{
+			instance = null;
+		}
 	}
 
 	void Update()
@@ -278,12 +288,12 @@ public class GameManager : MonoBehaviour
 		SetUpPlayerCharacter(GenerateCharacter(0, 0, Const.Side.Own));
 	}
 
-	private void SetUpPlayerCharacter(GameCharacter character)
+	private void SetUpPlayerCharacter(Character character)
 	{
 		_playerCharacter = character;
-		_playerCharacter.gameObject.AddComponent<GameCharacterController>();
+		_playerCharacter.gameObject.AddComponent<CharacterController>();
 
-		var aiList = _playerCharacter.GetComponents<GameCharacterAIBase>();
+		var aiList = _playerCharacter.GetComponents<CharacterAIBase>();
 
 		foreach (var ai in aiList)
 		{
@@ -325,17 +335,17 @@ public class GameManager : MonoBehaviour
 	/// <param name="y"></param>
 	/// <param name="side"></param>
 	/// <returns></returns>
-	public GameCharacter GenerateCharacter(int x, int y, Const.Side side)
+	public Character GenerateCharacter(int x, int y, Const.Side side)
 	{
 		return GenerateCharacter(Const.cellSizeX * x, Const.cellSizeY + y, side);
 	}
 	
-	public GameCharacter GenerateCharacter(float x, float y, Const.Side side)
+	public Character GenerateCharacter(float x, float y, Const.Side side)
 	{
 		var prefab = side == Const.Side.Own ? _characterOwnPrefab : _characterOppPrefab;
 
 		var go = (GameObject)Instantiate(prefab);
-		var character = go.GetComponent<GameCharacter>();
+		var character = go.GetComponent<Character>();
 
 		character.transform.position = new Vector3(x, y, Const.characterPositionZ);
 		
@@ -357,7 +367,7 @@ public class GameManager : MonoBehaviour
 	/// <param name="mapY"></param>
 	/// <param name="side"></param>
 	/// <returns></returns>
-	public GameEgg GenerateEgg(int mapX, int mapY, Const.Side side)
+	public Egg GenerateEgg(int mapX, int mapY, Const.Side side)
 	{
 		var x = Const.cellSizeX * mapX;
 		var y = Const.cellSizeY * mapY;
@@ -372,10 +382,10 @@ public class GameManager : MonoBehaviour
 	/// <param name="y"></param>
 	/// <param name="side"></param>
 	/// <returns></returns>
-	public GameEgg GenerateEgg(float x, float y, Const.Side side)
+	public Egg GenerateEgg(float x, float y, Const.Side side)
 	{
 		var prefab = side == Const.Side.Own ? _eggOwnPrefab : _eggOppPrefab;
-		var egg = Instantiate<GameEgg>(prefab);
+		var egg = Instantiate<Egg>(prefab);
 		egg.transform.position = new Vector3(x, y, Const.eggPositionZ);
 		egg.SetUp(side);
 		eggs.Add(egg);
@@ -386,14 +396,14 @@ public class GameManager : MonoBehaviour
 	/// 卵が孵化した際に呼ばれる
 	/// </summary>
 	/// <param name="egg"></param>
-	public void OnHatchEgg(GameEgg egg)
+	public void OnHatchEgg(Egg egg)
 	{
 		var character = GenerateCharacter(egg.transform.position.x, egg.transform.position.y, egg.side);
 		eggs.Remove(egg);
 		character.gameObject.AddComponent<GameCharacterAIRandom>();
 	}
 
-	public void OnEatEgg(GameEgg egg)
+	public void OnEatEgg(Egg egg)
 	{
 		eggs.Remove(egg);
 	}
@@ -411,12 +421,12 @@ public class GameManager : MonoBehaviour
 
 		go.transform.parent = transform;
 
-		var food = go.GetComponent<GameFood>();
+		var food = go.GetComponent<Food>();
 		foods.Add(food);
 		food.SetUp(foodType);
 	}
 
-	public void OnDeadCharacter(GameCharacter character)
+	public void OnDeadCharacter(Character character)
 	{
 		character.onDead -= OnDeadCharacter;
 
@@ -429,16 +439,16 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public void OnEatFood(GameFood food)
+	public void OnEatFood(Food food)
 	{
 		foods.Remove(food);
 	}
 
-	public void OnDeadPlayerCharacter(GameCharacter character)
+	public void OnDeadPlayerCharacter(Character character)
 	{
 		character.onDead -= OnDeadPlayerCharacter;
 
-		var ctrl = _playerCharacter.GetComponent<GameCharacterController>();
+		var ctrl = _playerCharacter.GetComponent<CharacterController>();
 		Destroy(ctrl);
 
 		_playerCharacter = null;

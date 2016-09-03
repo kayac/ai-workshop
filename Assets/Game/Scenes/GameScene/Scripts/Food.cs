@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-public class GameFood : GameCarriedObject
+public class Food : CarriedObject
 {
 	[SerializeField]
 	private SpriteRenderer _renderer;
@@ -44,17 +44,17 @@ public class GameFood : GameCarriedObject
 		_renderer.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBounce);
 	}
 
-	public override void OnCarriedStart(GameCharacter character)
+	public override void OnCarriedStart(Character character)
 	{
 		carringCharacter = character;
 	}
 
-	public override void OnCarriedEnd(GameCharacter character)
+	public override void OnCarriedEnd(Character character)
 	{
 		carringCharacter = null;
 	}
 
-	public void OnEat(GameCharacter character)
+	public void OnEat(Character character)
 	{
 		GameManager.instance.OnEatFood(this);
 		this.enabled = false;

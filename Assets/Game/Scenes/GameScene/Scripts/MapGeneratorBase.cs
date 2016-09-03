@@ -2,5 +2,5 @@
 
 public abstract class GameMapGeneratorBase : MonoBehaviour
 {
-	public abstract GameMapCell[,] Generate (int sizeX, int sizeY);
+	public abstract MapCell[,] Generate (int sizeX, int sizeY);
 }

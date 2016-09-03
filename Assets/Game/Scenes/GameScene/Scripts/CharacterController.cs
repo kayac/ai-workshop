@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(GameCharacter))]
-public class GameCharacterController : MonoBehaviour
+[RequireComponent(typeof(Character))]
+public class CharacterController : MonoBehaviour
 {
 	private KeyCode? _prevKeyCode;
 
 	private static readonly KeyCode[] _moveKeyCodes = new KeyCode[]{KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.RightArrow};
 
-	private GameCharacter _character;
+	private Character _character;
 
 	void Awake()
 	{
-		_character = GetComponent<GameCharacter>();
+		_character = GetComponent<Character>();
 	}
 
 	void Update()

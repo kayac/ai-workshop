@@ -1,11 +1,11 @@
 ﻿[System.Serializable]
-public class GameMapCell
+public class MapCell
 {
 	public int x { get; private set; }
 	public int y { get; private set; }
 	public Const.MapCellType contentType { get; private set; }
 
-	public GameMapCell(int x, int y, Const.MapCellType contentTyoe)
+	public MapCell(int x, int y, Const.MapCellType contentTyoe)
 	{
 		this.x = x;
 		this.y = y;

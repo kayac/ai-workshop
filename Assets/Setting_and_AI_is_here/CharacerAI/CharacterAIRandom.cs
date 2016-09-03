@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameCharacterAIRandom : GameCharacterAIBase
+public class GameCharacterAIRandom : CharacterAIBase
 {
 	void Start()
 	{

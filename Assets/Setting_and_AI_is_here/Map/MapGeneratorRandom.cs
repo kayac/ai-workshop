@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-public class GameMapGeneratorRandom : GameMapGeneratorBase
+public class MapGeneratorRandom : GameMapGeneratorBase
 {
-	public override GameMapCell[,] Generate(int sizeX, int sizeY)
+	public override MapCell[,] Generate(int sizeX, int sizeY)
 	{
-		var map = new GameMapCell[sizeX, sizeY];
+		var map = new MapCell[sizeX, sizeY];
 
 		for (int x = 0; x < sizeX; x++)
 		{
@@ -23,7 +23,7 @@ public class GameMapGeneratorRandom : GameMapGeneratorBase
 						break;
 				}
 
-				var cell = new GameMapCell(x, y, cellType);
+				var cell = new MapCell(x, y, cellType);
 				map[x, y] = cell;
 			}
 		}
