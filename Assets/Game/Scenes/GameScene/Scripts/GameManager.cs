@@ -387,7 +387,7 @@ public class GameManager : MonoBehaviour
 	/// <param name="egg"></param>
 	public void OnHatchEgg(GameEgg egg)
 	{
-		var character = GenerateCharacter((int)egg.transform.position.x, (int)egg.transform.position.y, egg.side);
+		var character = GenerateCharacter(egg.transform.position.x, egg.transform.position.y, egg.side);
 		character.gameObject.AddComponent<GameCharacterAIRandom>();
 	}
 
