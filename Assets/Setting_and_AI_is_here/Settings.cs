@@ -6,6 +6,23 @@ using System.Collections.Generic;
 /// </summary>
 public static class Setting
 {
+	public static readonly Type ownCharacterAIType = typeof(
+		// ここのクラスを変更すると自チームのキャラのAIを設定できる
+		GameCharacterAIRandom
+	);
+
+	public static readonly Type oppCharacterAIType = typeof(
+		// ここのクラスを変更すると敵チームのキャラのAIを設定できる
+		GameCharacterAIRandom
+	);
+
+	public static readonly Type foodGenerateLogicType = typeof(
+		// ここのクラスを変更するとゲーム開始時に使用するロジックが適用される
+		FoodGenerateLogicRandom
+	);
+
+	
+
 	public static readonly List<CharacterLevelData> characterLevels = new List<CharacterLevelData>(
 		new CharacterLevelData[] {
 			
@@ -27,15 +44,7 @@ public static class Setting
 	/// </summary>
 	public const float characterMaxLifeTime = 60f;
 
-	/// <summary>
-	/// フードを生成するロジックを指定する
-	/// </summary>
-	/// <param name="FoodGenerateLogicRandom"></param>
-	/// <returns></returns>
-	public static readonly Type foodGenerateLogicType = typeof(
-		// ここのクラスを変更するとゲーム開始時に使用するロジックが適用される
-		FoodGenerateLogicRandom
-	);
+	
 
 	/// <summary>
 	/// 食べ物を食べた時に貰える経験値
