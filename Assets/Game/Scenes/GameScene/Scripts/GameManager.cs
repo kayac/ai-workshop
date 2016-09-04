@@ -176,6 +176,9 @@ public class GameManager : MonoBehaviour
 		{
 			_loseTextRoot.SetActive(true);
 		}
+
+		_ownScoreNumber.number = ownCharacters.Count;
+		_oppScoreNumber.number = oppCharacters.Count;
 	}
 
 	private void ProcessPlay()
@@ -365,7 +368,7 @@ public class GameManager : MonoBehaviour
 	/// <returns></returns>
 	public Character GenerateCharacter(int x, int y, Const.Side side)
 	{
-		return GenerateCharacter(Const.cellSizeX * x, Const.cellSizeY + y, side);
+		return GenerateCharacter(Const.cellSizeX * x, Const.cellSizeY * y, side);
 	}
 	
 	/// <summary>
