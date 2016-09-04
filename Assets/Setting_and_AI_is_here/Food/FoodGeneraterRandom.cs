@@ -8,11 +8,6 @@ public class FoodGeneraterRandom : FoodGeneraterBase
 
 	private int _generateRate = 5;
 
-	public override void OnInit()
-	{
-		SetFoods();
-	}
-
 	void Update()
 	{
 		_currentTime += Time.deltaTime;
@@ -38,7 +33,7 @@ public class FoodGeneraterRandom : FoodGeneraterBase
 			{
 				var cell = map[x, y];
 				
-				if (cell.contentType != Const.MapCellType.None) continue;
+				if (cell != Const.MapCellType.None) continue;
 
 				var pos = GameUtils.GetPosition(x, y);
 				var col = Physics2D.OverlapBox(pos, Const.cellSizeVector2, 0, layerMask);

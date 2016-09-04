@@ -6,6 +6,10 @@ using System.Collections.Generic;
 /// </summary>
 public static class Setting
 {
+	public static readonly Type presetType = typeof(
+		GamePresetRandom
+	);
+
 	public static readonly Type ownCharacterAIType = typeof(
 		// ここのクラスを変更すると自チームのキャラのAIを設定できる
 		GameCharacterAIRandom
@@ -26,8 +30,6 @@ public static class Setting
 		MapGeneratorRandom
 	);
 
-	
-
 	public static readonly List<CharacterLevelData> characterLevels = new List<CharacterLevelData>(
 		new CharacterLevelData[] {
 			
@@ -37,6 +39,12 @@ public static class Setting
 		}
 	);
 
+	public const int mapSizeX = 20;
+	public const int mapSizeY = 20;
+
+	/// <summary>
+	/// 制限時間(秒)
+	/// </summary>
 	public const float gameTime = 100;
 
 	/// <summary>

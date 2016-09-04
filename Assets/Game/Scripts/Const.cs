@@ -47,7 +47,7 @@ public static class Const
 		StageWall,
 		StageRiver,
 		CharacterPlayer,
-		ChatacterOwn,
+		CharacterOwn,
 		CharacterOpp,
 		FoodNormal,
 		FoodSuper,

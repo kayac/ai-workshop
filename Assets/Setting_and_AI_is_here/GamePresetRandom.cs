@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class GamePresetRandom : GamePresetBase
 {
@@ -50,7 +49,7 @@ public class GamePresetRandom : GamePresetBase
 			}
 
 			var p = i < ownCharacterAmount ?
-				Const.GameStagePreset.ChatacterOwn : Const.GameStagePreset.CharacterOpp;
+				Const.GameStagePreset.CharacterOwn : Const.GameStagePreset.CharacterOpp;
 
 			if (i == 0)
 			{

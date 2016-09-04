@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
 	public int mapSizeY { get { return _mapSizeY; } }
 
-	public MapCell[,] map { get; private set ; }
+	public Const.MapCellType[,] map { get; private set ; }
 
 	[SerializeField]
 	private Transform _cameraRoot;
@@ -83,6 +83,8 @@ public class GameManager : MonoBehaviour
 
 	private Const.Mode _mode;
 
+	private GamePresetBase _preset;
+
 	private MapGeneratorBase _mapGenerater;
 
 	private FoodGeneraterBase _foodGenerater;
@@ -103,6 +105,7 @@ public class GameManager : MonoBehaviour
 		instance = this;
 		gameTime = Setting.gameTime;
 
+		_preset = gameObject.AddComponent(Setting.presetType) as GamePresetBase;
 		_foodGenerater = gameObject.AddComponent(Setting.foodGenerateLogicType) as FoodGeneraterBase;
 		_mapGenerater =  gameObject.AddComponent(Setting.mapGenerateLogicType) as MapGeneratorBase;
 
@@ -111,11 +114,8 @@ public class GameManager : MonoBehaviour
 		foods = new List<Food>();
 		eggs = new List<Egg>();
 
-		InitMap();
-		InitPlayerCharacter();
-		InitOtherCharacter();
-		InitFoods();
-
+		InitPreset();
+		
 		_mode= Const.Mode.Play;
 	}
 
@@ -235,22 +235,40 @@ public class GameManager : MonoBehaviour
 		_cameraRoot.transform.position = c.transform.position;
 	}
 
+	private void InitPreset()
+	{
+		var presetData = _preset.Generate(Setting.mapSizeX, Setting.mapSizeY);
+		InitMap(presetData);
+		InitPresetContents(presetData);
+	}
+
 	/// <summary>
 	/// マップを生成する
 	/// </summary>
-	private void InitMap()
+	private void InitMap(Const.GameStagePreset[,] presets)
 	{
-		map = _mapGenerater.Generate(_mapSizeX, _mapSizeY);
 
-		for (int x = 0; x < _mapSizeX; x++)
+		map = new Const.MapCellType[Setting.mapSizeX, Setting.mapSizeY];
+		
+		for (int x = 0; x < Setting.mapSizeX; x++)
 		{
-			for (int y = 0; y < _mapSizeY; y++)
+			for (int y = 0; y < Setting.mapSizeY; y++)
 			{
-				var cell = map[x, y];
-				
+				var p = presets[x, y];
+
+				var content = Const.MapCellType.None;
+
+				switch(p)
+				{
+					case Const.GameStagePreset.StageRiver: content = Const.MapCellType.River; break;
+					case Const.GameStagePreset.StageWall : content = Const.MapCellType.Wall; break;
+				}
+
+				map[x, y] = content;
+
 				GameObject prefab = null;
 
-				switch (cell.contentType)
+				switch (content)
 				{
 					case Const.MapCellType.None: prefab = _groundPrefab; break;
 					case Const.MapCellType.Wall: prefab = _wallPrefab; break;
@@ -282,13 +300,51 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// プレイヤーキャラクターを生成する
-	/// </summary>
-	private void InitPlayerCharacter()
+
+	private void InitPresetContents(Const.GameStagePreset[,] presets)
 	{
-		SetUpPlayerCharacter(GenerateCharacter(0, 0, Const.Side.Own));
+		for (int x = 0; x < Setting.mapSizeX; x++)
+		{
+			for (int y = 0; y < Setting.mapSizeY; y++)
+			{
+				switch(presets[x, y])
+				{
+					case Const.GameStagePreset.CharacterPlayer:
+						SetUpPlayerCharacter(GenerateCharacter(x, y, Const.Side.Own));
+						break;
+
+					case Const.GameStagePreset.CharacterOwn:
+						SetUpCharacterAI(GenerateCharacter(x, y, Const.Side.Own));
+						break;
+
+					case Const.GameStagePreset.CharacterOpp:
+						SetUpCharacterAI(GenerateCharacter(x, y, Const.Side.Opp));
+						break;
+
+					case Const.GameStagePreset.EggOwn:
+						GenerateEgg(x, y, Const.Side.Own);
+						break;
+
+					case Const.GameStagePreset.EggOpp:
+						GenerateEgg(x, y, Const.Side.Opp);
+						break;
+
+					case Const.GameStagePreset.FoodNormal:
+						GenerateFood(x, y, Const.FoodType.Normal);
+						break;
+					case Const.GameStagePreset.FoodSuper:
+						GenerateFood(x, y, Const.FoodType.Super);
+						break;
+
+					case Const.GameStagePreset.FoodEgg:
+						GenerateFood(x, y, Const.FoodType.Egg);
+						break;
+				}				
+			}
+		}
 	}
+
+
 
 	private void SetUpPlayerCharacter(Character character)
 	{
@@ -303,6 +359,14 @@ public class GameManager : MonoBehaviour
 		}
 
 		_playerCharacter.onDead += OnDeadPlayerCharacter;
+	}
+
+	private void SetUpCharacterAI(Character character)
+	{
+		character.gameObject.AddComponent(
+			character.side == Const.Side.Own ?
+			Setting.ownCharacterAIType : Setting.oppCharacterAIType
+		);
 	}
 
 	/// <summary>
@@ -326,11 +390,6 @@ public class GameManager : MonoBehaviour
 				Setting.ownCharacterAIType : Setting.oppCharacterAIType
 			);
 		}
-	}
-
-	private void InitFoods()
-	{
-		_foodGenerater.OnInit();
 	}
 
 	/// <summary>
@@ -404,11 +463,8 @@ public class GameManager : MonoBehaviour
 	public void OnHatchEgg(Egg egg)
 	{
 		var character = GenerateCharacter(egg.transform.position.x, egg.transform.position.y, egg.side);
+		SetUpCharacterAI(character);
 		eggs.Remove(egg);
-		character.gameObject.AddComponent(
-			character.side == Const.Side.Own ?
-				Setting.ownCharacterAIType : Setting.oppCharacterAIType
-			);
 	}
 
 	public void OnEatEgg(Egg egg)
