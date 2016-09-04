@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public static class Setting
 {
 	public static readonly Type presetType = typeof(
-		GamePresetRandom
+		GamePresetDesigned
 	);
 
 	public static readonly Type ownCharacterAIType = typeof(
