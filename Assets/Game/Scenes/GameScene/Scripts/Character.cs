@@ -463,6 +463,9 @@ public class Character : CarriedObject
 		ChangeDirection(false);
 	}
 
+	/// <summary>
+	/// 移動アニメーションをキャンセルする
+	/// </summary>
 	public void CancenMove()
 	{
 		ChangeAnimation(false);
@@ -484,11 +487,6 @@ public class Character : CarriedObject
 
 		var distance = Vector3.Distance(position, this.transform.position);
 		var duration = distance / _speed;
-
-		if (position.x < transform.position.x)
-		{
-
-		}
 
 		_rigidbody2D.DOMove(position, duration, false)
 		.SetEase(Ease.Linear)

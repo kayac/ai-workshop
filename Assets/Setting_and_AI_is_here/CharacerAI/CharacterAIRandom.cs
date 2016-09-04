@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// ランダムに移動するキャラクターAI
+/// </summary>
 public class GameCharacterAIRandom : CharacterAIBase
 {
 	void Start()
@@ -22,8 +25,9 @@ public class GameCharacterAIRandom : CharacterAIBase
 		{
 			var isComplete = false;
 
+			// 方向を乱数で決める
 			var random = Random.Range(0, 4);
-
+			
 			var position = transform.position;
 
 			switch (random)
@@ -34,6 +38,7 @@ public class GameCharacterAIRandom : CharacterAIBase
 				case 3: position += Vector3.right; break;
 			}
 
+			/// キャラクターを移動させる
 			_character.MoveTo(position, () =>
 			{
 				isComplete = true;

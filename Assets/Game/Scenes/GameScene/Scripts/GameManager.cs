@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 
+/// <summary>
+/// ゲームの進行をするシングルトンクラス
+/// </summary>
 public class GameManager : MonoBehaviour
 {
 	public static GameManager instance { get; private set ; }
@@ -59,16 +61,38 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	private GameObject _selectNewCharacterRoot;
 
-	private Character _playerCharacter;
-
 	private int _selectingOwnCharacterIndex;
 
+	private Character _playerCharacter;
+
+	/// <summary>
+	/// プレイヤー操作キャラ
+	/// </summary>
+	/// <returns></returns>
+	public Character playerCharacter { get { return _playerCharacter; } }
+
+	/// <summary>
+	/// 自チームのキャラクターの一覧
+	/// </summary>
+	/// <returns></returns>
 	public List<Character> ownCharacters { get; private set; }
 	
+	/// <summary>
+	/// 敵チームのキャラクター一覧
+	/// </summary>
+	/// <returns></returns>
 	public List<Character> oppCharacters { get; private set; }
 
+	/// <summary>
+	/// 食べ物の一覧
+	/// </summary>
+	/// <returns></returns>
 	public List<Food> foods { get; private set; }
 
+	/// <summary>
+	/// 卵の一覧
+	/// </summary>
+	/// <returns></returns>
 	public List<Egg> eggs { get; private set ; }
 
 	private Const.Mode _mode;
@@ -77,8 +101,16 @@ public class GameManager : MonoBehaviour
 
 	private FoodGeneraterBase _foodGenerater;
 
+	/// <summary>
+	/// 現在のゲーム残り時間(秒)
+	/// </summary>
+	/// <returns></returns>
 	public float gameTime { get; private set; }
 
+	/// <summary>
+	/// ゲームオーバーしているか
+	/// </summary>
+	/// <returns></returns>
 	public bool isGameOver { get; private set; }
 
 	void Awake()
