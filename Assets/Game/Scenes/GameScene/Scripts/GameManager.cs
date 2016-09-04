@@ -6,16 +6,6 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager instance { get; private set ; }
 
-	[SerializeField]
-	private int _mapSizeX = 10;
-
-	public int mapSizeX { get { return _mapSizeX; } }
-	
-	[SerializeField]
-	private int _mapSizeY = 10;
-
-	public int mapSizeY { get { return _mapSizeY; } }
-
 	public Const.MapCellType[,] map { get; private set ; }
 
 	[SerializeField]
@@ -85,8 +75,6 @@ public class GameManager : MonoBehaviour
 
 	private GamePresetBase _preset;
 
-	private MapGeneratorBase _mapGenerater;
-
 	private FoodGeneraterBase _foodGenerater;
 
 	public float gameTime { get; private set; }
@@ -107,7 +95,6 @@ public class GameManager : MonoBehaviour
 
 		_preset = gameObject.AddComponent(Setting.presetType) as GamePresetBase;
 		_foodGenerater = gameObject.AddComponent(Setting.foodGenerateLogicType) as FoodGeneraterBase;
-		_mapGenerater =  gameObject.AddComponent(Setting.mapGenerateLogicType) as MapGeneratorBase;
 
 		ownCharacters = new List<Character>();
 		oppCharacters = new List<Character>();
@@ -286,11 +273,11 @@ public class GameManager : MonoBehaviour
 		}
 
 		// 外の壁を作成
-		for (int x = -1; x < _mapSizeX + 1; x++)
+		for (int x = -1; x < Setting.mapSizeX + 1; x++)
 		{
-			for (int y = -1; y < _mapSizeY + 1; y++)
+			for (int y = -1; y < Setting.mapSizeY + 1; y++)
 			{
-				if (0 <= x && x < _mapSizeX && 0 <= y && y < _mapSizeY) continue;
+				if (0 <= x && x < Setting.mapSizeX && 0 <= y && y < Setting.mapSizeY) continue;
 
 				var wall = Instantiate<GameObject>(_wallPrefab);
 				var pos = new Vector3(Const.cellSizeX * x, Const.cellSizeY * y, Const.mapPositionZ);
@@ -370,29 +357,6 @@ public class GameManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 他のキャラを生成する
-	/// </summary>
-	void InitOtherCharacter()
-	{
-		int count = 20;
-
-		for(int i = 0; i < count; i++)
-		{
-			var side = count / 2 < i ? Const.Side.Own : Const.Side.Opp;
-
-			var x = Random.Range(0, _mapSizeX);
-			var y = Random.Range(0, _mapSizeY);
-
-			var character = GenerateCharacter(x, y, side);
-
-			character.gameObject.AddComponent(
-				character.side == Const.Side.Own ?
-				Setting.ownCharacterAIType : Setting.oppCharacterAIType
-			);
-		}
-	}
-
-	/// <summary>
 	/// キャラクターを生成する
 	/// </summary>
 	/// <param name="x"></param>
@@ -404,6 +368,13 @@ public class GameManager : MonoBehaviour
 		return GenerateCharacter(Const.cellSizeX * x, Const.cellSizeY + y, side);
 	}
 	
+	/// <summary>
+	/// キャラクターを生成する
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="side"></param>
+	/// <returns></returns>
 	public Character GenerateCharacter(float x, float y, Const.Side side)
 	{
 		var prefab = side == Const.Side.Own ? _characterOwnPrefab : _characterOppPrefab;
@@ -467,6 +438,10 @@ public class GameManager : MonoBehaviour
 		eggs.Remove(egg);
 	}
 
+	/// <summary>
+	/// 卵が孵化した
+	/// </summary>
+	/// <param name="egg"></param>
 	public void OnEatEgg(Egg egg)
 	{
 		eggs.Remove(egg);
@@ -490,6 +465,10 @@ public class GameManager : MonoBehaviour
 		food.SetUp(foodType);
 	}
 
+	/// <summary>
+	/// キャラクターが死亡した時
+	/// </summary>
+	/// <param name="character"></param>
 	public void OnDeadCharacter(Character character)
 	{
 		character.onDead -= OnDeadCharacter;
@@ -503,11 +482,19 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// 食べ物が食べられた時
+	/// </summary>
+	/// <param name="food"></param>
 	public void OnEatFood(Food food)
 	{
 		foods.Remove(food);
 	}
 
+	/// <summary>
+	/// プレイヤーが操作するキャラクターが死亡した時
+	/// </summary>
+	/// <param name="character"></param>
 	public void OnDeadPlayerCharacter(Character character)
 	{
 		character.onDead -= OnDeadPlayerCharacter;
@@ -520,11 +507,17 @@ public class GameManager : MonoBehaviour
 		Invoke("StartSelectPlayerCharacter", 1f);
 	}
 
+	/// <summary>
+	/// プレイヤーが新しく操作するキャラクターを選択する
+	/// </summary>
 	private void StartSelectPlayerCharacter()
 	{
 		SelectPlayerCharacter();
 	}
 
+	/// <summary>
+	/// プレイヤーが新しく操作するキャラクターを選択する
+	/// </summary>
 	public void SelectPlayerCharacter()
 	{
 		Time.timeScale = 0f;

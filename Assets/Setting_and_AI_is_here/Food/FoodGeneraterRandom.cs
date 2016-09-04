@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// 一定期間ごとにランダムに食べ物を配置する
+/// </summary>
 public class FoodGeneraterRandom : FoodGeneraterBase
 {
 	private float _currentTime;
@@ -22,8 +25,8 @@ public class FoodGeneraterRandom : FoodGeneraterBase
 	private void SetFoods()
 	{
 		var map = GameManager.instance.map;
-		var mapX = GameManager.instance.mapSizeX;
-		var mapY = GameManager.instance.mapSizeY;
+		var mapX = Setting.mapSizeX;
+		var mapY = Setting.mapSizeY;
 
 		var layerMask = LayerMask.GetMask(Const.layerNameCharacter, Const.layerNameEgg, Const.layerNameFood);
 

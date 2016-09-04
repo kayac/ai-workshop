@@ -25,10 +25,6 @@ public static class Setting
 		FoodGeneraterRandom
 	);
 
-	public static readonly Type mapGenerateLogicType = typeof(
-		// ここのクラスを変更するとマップ生成ロジックを適用することができる
-		MapGeneratorRandom
-	);
 
 	public static readonly List<CharacterLevelData> characterLevels = new List<CharacterLevelData>(
 		new CharacterLevelData[] {
