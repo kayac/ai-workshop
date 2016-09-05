@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public static class Setting
 {
 	public static readonly Type presetType = typeof(
+		// ここのクラスを変更するとゲーム開始時のステージを設定できる
 		GamePresetDesigned
 	);
 
