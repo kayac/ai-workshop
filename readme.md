@@ -12,3 +12,6 @@ https://docs.google.com/presentation/d/1gYyFVCPvicma9GEbDx4PYy7s7TTTtbfBiryHRKJ1
 * [CharacterAI](https://github.com/kayac/ai-workshop/tree/master/Assets/Setting_and_AI_is_here/CharacerAI) : キャラクターのAIのサンプル
 * [Food](https://github.com/kayac/ai-workshop/tree/master/Assets/Setting_and_AI_is_here/Food) : 食べ物の配置ロジック
 * [Preset](https://github.com/kayac/ai-workshop/tree/master/Assets/Setting_and_AI_is_here/Preset) : ゲーム開始時のステージ構成
+
+
+ゲーム進行中の情報を取得したい場合は、[GameManager](https://github.com/kayac/ai-workshop/blob/master/Assets/Game/Scenes/GameScene/Scripts/GameManager.cs#L72)から取得できます。
