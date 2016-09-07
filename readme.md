@@ -4,6 +4,9 @@
 
 https://docs.google.com/presentation/d/1gYyFVCPvicma9GEbDx4PYy7s7TTTtbfBiryHRKJ1LEo/pub?start=false&loop=false&delayms=3000&slide=id.p
 
+## Unityのバージョン
+Unity 5.4.0 p4
+
 ## ゲームの設定・AIを変更する
 
 [Assets/Setting_and_AI_is_here](https://github.com/kayac/ai-workshop/tree/master/Assets/Setting_and_AI_is_here) 以下に設定ファイルとAI・ロジックのサンプルが置かれています。
