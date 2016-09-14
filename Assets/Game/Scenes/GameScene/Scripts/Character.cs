@@ -101,12 +101,7 @@ public class Character : CarriedObject
 
 	#endregion
 
-	/// <summary>
-	/// 移動速度(毎秒あたり)
-	/// </summary>
-	[Header("移動速度(毎秒あたり)")]
-	[SerializeField]
-	private float _speed;
+	private float _speed { get { return _levelData.speed; } }
 
 	/// <summary>
 	/// 表示するスプライトの番号
