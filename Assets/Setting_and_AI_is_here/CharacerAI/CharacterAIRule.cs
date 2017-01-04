@@ -32,6 +32,12 @@ public class CharacterAIRule : CharacterAIBase
 
 		_character.MoveTo(position, onComplete);
 	}
+
+	private bool IsEatable(Character target)
+	{
+		return !target.isSuperMode && (_character.isSuperMode || target.level < _character.level);
+	}
+
 	private void TryApproachFood(Action onComplete)
 	{
 		var target = (from f in GameManager.instance.foods
@@ -47,7 +53,7 @@ public class CharacterAIRule : CharacterAIBase
 	private void TryApproachEatableEnemy(Action onComplete)
 	{
 		var target = (from c in GameManager.instance.ownCharacters
-			where (c.level < _character.level) || (!c.isSuperMode && _character.isSuperMode)
+			where IsEatable(c)
 			let d = (c.transform.position - _character.transform.position).sqrMagnitude
 			where d < 16
 			orderby d ascending
