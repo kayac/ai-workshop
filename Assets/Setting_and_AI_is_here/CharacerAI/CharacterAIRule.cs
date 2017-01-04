@@ -52,13 +52,9 @@ public class CharacterAIRule : CharacterAIBase
 	}
 	private void TryApproachEatableEnemy(Action onComplete)
 	{
-		var target = (from c in GameManager.instance.ownCharacters
-			where IsEatable(c)
-			let d = (c.transform.position - _character.transform.position).sqrMagnitude
-			where d < 16
-			orderby d ascending
-			select c).FirstOrDefault();
-		if (target != null)
+		var target = GameManager.instance.playerCharacter;
+
+		if (IsEatable(target) && (target.transform.position - _character.transform.position).sqrMagnitude < 16)
 			Approach(onComplete, target);
 		else
 			RandomWalk(onComplete);
