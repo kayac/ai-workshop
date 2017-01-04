@@ -103,6 +103,8 @@ public class Character : CarriedObject
 
 	private float _speed { get { return _levelData.speed; } }
 
+	private bool _isPlayer = false;
+
 	/// <summary>
 	/// 表示するスプライトの番号
 	/// タイムラインアニメーションから操作できるようにパブリックになってます
@@ -265,6 +267,11 @@ public class Character : CarriedObject
 			_hair.transform.localScale = new Vector3(1, rate, 1);
 			_hairFireRoot.position = new Vector3(_hairFireRoot.position.x, _hair.bounds.max.y, _hairFireRoot.position.z);
 		}
+	}
+
+	public void SetAsPlayer()
+	{
+		_isPlayer = true;
 	}
 
 	/// <summary>
@@ -647,8 +654,12 @@ public class Character : CarriedObject
 	/// </summary>
 	private void LayEgg()
 	{
-		currentLayEggCount = 0;
-		GameManager.instance.GenerateEgg(transform.position.x, transform.position.y, side);
+		// FIXME: 自分がプレイヤーだったら卵産まないハック
+		if (!_isPlayer)
+		{
+			currentLayEggCount = 0;
+			GameManager.instance.GenerateEgg (transform.position.x, transform.position.y, side);
+		}
 	}
 
 	/// <summary>
