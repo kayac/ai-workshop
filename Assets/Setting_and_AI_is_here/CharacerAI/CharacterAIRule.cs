@@ -44,7 +44,7 @@ public class CharacterAIRule : CharacterAIBase
 		else
 			RandomWalk(onComplete);
 	}
-	private void TryApproachEnemy(Action onComplete)
+	private void TryApproachEatableEnemy(Action onComplete)
 	{
 		var target = (from c in GameManager.instance.ownCharacters
 			where (c.level < _character.level) || (!c.isSuperMode && _character.isSuperMode)
@@ -85,7 +85,7 @@ public class CharacterAIRule : CharacterAIBase
 			if (_character.level <= 1)
 				action = TryApproachFood;
 			else
-				action = TryApproachEnemy;
+				action = TryApproachEatableEnemy;
 
 			action(() => { isComplete = true; });
 
