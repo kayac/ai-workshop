@@ -90,4 +90,9 @@ public static class Setting
 	/// スーパー状態の持続時間(秒)
 	/// </summary>
 	public const float superModeTime = 10;
+
+	/// <summary>
+	/// 味方が繁殖しないモード
+	/// </summary>
+	public const bool noEggLayMode = true;
 }

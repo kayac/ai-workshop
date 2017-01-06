@@ -371,6 +371,7 @@ public class GameManager : MonoBehaviour
 	private void SetUpPlayerCharacter(Character character)
 	{
 		_playerCharacter = character;
+		_playerCharacter.SetAsPlayer();
 		_playerCharacter.gameObject.AddComponent<CharacterController>();
 
 		var aiList = _playerCharacter.GetComponents<CharacterAIBase>();
