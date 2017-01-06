@@ -38,28 +38,7 @@ public class CharacterAIRule : CharacterAIBase
 		return !target.isSuperMode && (_character.isSuperMode || target.level < _character.level);
 	}
 
-	private void TryApproachFood(Action onComplete)
-	{
-		var target = (from f in GameManager.instance.foods
-			let d = (f.transform.position - _character.transform.position).sqrMagnitude
-			where d < 16
-			orderby d ascending
-			select f).FirstOrDefault();
-		if (target != null)
-			Approach(onComplete, target);
-		else
-			RandomWalk(onComplete);
-	}
-	private void TryApproachEatableEnemy(Action onComplete)
-	{
-		var target = GameManager.instance.playerCharacter;
-
-		if (target != null && IsEatable(target) && (target.transform.position - _character.transform.position).sqrMagnitude < 16)
-			Approach(onComplete, target);
-		else
-			RandomWalk(onComplete);
-	}
-	private void RandomWalk(Action onComplete)
+	private void RandomWalk(Action onComplete, MonoBehaviour target)
 	{
 		var position = transform.position;
 
@@ -75,6 +54,30 @@ public class CharacterAIRule : CharacterAIBase
 		_character.MoveTo(position, onComplete);
 	}
 
+	private MonoBehaviour FindFood()
+	{
+		// レベルが上がっていれば食べない
+		if (_character.level >= 2)
+			return null;
+
+		// 近くの食べ物を探す
+		return (from f in GameManager.instance.foods
+			let d = (f.transform.position - _character.transform.position).sqrMagnitude
+			where d < 16
+			orderby d ascending
+			select f).FirstOrDefault();
+	}
+
+	private MonoBehaviour FindEatableEnemy()
+	{
+		var target = GameManager.instance.playerCharacter;
+
+		if (target != null && IsEatable(target) && (target.transform.position - _character.transform.position).sqrMagnitude < 16)
+			return target;
+
+		return null;
+	}
+
 	private IEnumerator CoRandom()
 	{
 		yield return new WaitForSeconds(2);
@@ -82,14 +85,17 @@ public class CharacterAIRule : CharacterAIBase
 		while (enabled)
 		{
 			var isComplete = false;
-			Action<Action> action;
+			MonoBehaviour target;
+			Action<Action, MonoBehaviour> action;
 
-			if (_character.level <= 1)
-				action = TryApproachFood;
+			if ((target = FindFood()) != null)
+				action = Approach;
+			else if ((target = FindEatableEnemy()) != null)
+				action = Approach;
 			else
-				action = TryApproachEatableEnemy;
+				action = RandomWalk;
 
-			action(() => { isComplete = true; });
+			action(() => { isComplete = true; }, target);
 
 			while(!isComplete)
 			{
