@@ -17,6 +17,18 @@ public class CharacterAIRule : CharacterAIBase
 		StartCoroutine(CoRandom());
 	}
 
+	private bool IsWall(Vector3 position)
+	{
+		var x = (int) position.x;
+		var y = (int) position.y;
+
+		if (x < 0 || x >= GameManager.instance.map.GetLength(0)
+		    || y < 0 || y >= GameManager.instance.map.GetLength(1))
+			return true;
+
+		return GameManager.instance.map[x, y] != Const.MapCellType.None;
+	}
+
 	private void Approach(Action onComplete, MonoBehaviour target)
 	{
 		var position = _character.transform.position;
@@ -39,13 +51,18 @@ public class CharacterAIRule : CharacterAIBase
 		var destination = target.transform.position;
 		var direction = destination - position;
 
+		Vector3 move;
 		if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y)) {
-			position += (direction.x > 0 ? Vector3.left : Vector3.right);
+			move = (direction.x > 0 ? Vector3.left : Vector3.right);
+			if (IsWall(position + move))
+				move = (IsWall(position + Vector3.up) ? Vector3.down :  Vector3.up);
 		} else {
-			position += (direction.y > 0 ? Vector3.down : Vector3.up);
+			move = (direction.y > 0 ? Vector3.down : Vector3.up);
+			if (IsWall(position + move))
+				move = (IsWall(position + Vector3.left) ? Vector3.right :  Vector3.left);
 		}
 
-		_character.MoveTo(position, onComplete);
+		_character.MoveTo(position + move, onComplete);
 	}
 
 	private bool IsEatable(Character target)
