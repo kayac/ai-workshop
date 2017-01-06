@@ -654,8 +654,7 @@ public class Character : CarriedObject
 	/// </summary>
 	private void LayEgg()
 	{
-		// FIXME: 自分がプレイヤーだったら卵産まないハック
-		if (!_isPlayer)
+		if (!_isPlayer && Setting.noEggLayMode)
 		{
 			currentLayEggCount = 0;
 			GameManager.instance.GenerateEgg (transform.position.x, transform.position.y, side);
