@@ -32,10 +32,29 @@ public class CharacterAIRule : CharacterAIBase
 
 		_character.MoveTo(position, onComplete);
 	}
+	private void Avoid(Action onComplete, MonoBehaviour target)
+	{
+		var position = _character.transform.position;
+
+		var destination = target.transform.position;
+		var direction = destination - position;
+
+		if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y)) {
+			position += (direction.x > 0 ? Vector3.left : Vector3.right);
+		} else {
+			position += (direction.y > 0 ? Vector3.down : Vector3.up);
+		}
+
+		_character.MoveTo(position, onComplete);
+	}
 
 	private bool IsEatable(Character target)
 	{
 		return !target.isSuperMode && (_character.isSuperMode || target.level < _character.level);
+	}
+	private bool IsEatableBy(Character target)
+	{
+		return !_character.isSuperMode && (target.isSuperMode || _character.level < target.level);
 	}
 
 	private void RandomWalk(Action onComplete, MonoBehaviour target)
@@ -78,6 +97,16 @@ public class CharacterAIRule : CharacterAIBase
 		return null;
 	}
 
+	private MonoBehaviour FindStrongerEnemy()
+	{
+		var target = GameManager.instance.playerCharacter;
+
+		if (target != null && IsEatableBy(target) && (target.transform.position - _character.transform.position).sqrMagnitude < 16)
+			return target;
+
+		return null;
+	}
+
 	private IEnumerator CoRandom()
 	{
 		yield return new WaitForSeconds(2);
@@ -88,7 +117,9 @@ public class CharacterAIRule : CharacterAIBase
 			MonoBehaviour target;
 			Action<Action, MonoBehaviour> action;
 
-			if ((target = FindFood()) != null)
+			if ((target = FindStrongerEnemy()) != null)
+				action = Avoid;
+			else if ((target = FindFood()) != null)
 				action = Approach;
 			else if ((target = FindEatableEnemy()) != null)
 				action = Approach;
