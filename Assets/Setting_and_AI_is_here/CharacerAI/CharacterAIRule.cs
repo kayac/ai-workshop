@@ -54,7 +54,7 @@ public class CharacterAIRule : CharacterAIBase
 	{
 		var target = GameManager.instance.playerCharacter;
 
-		if (IsEatable(target) && (target.transform.position - _character.transform.position).sqrMagnitude < 16)
+		if (target != null && IsEatable(target) && (target.transform.position - _character.transform.position).sqrMagnitude < 16)
 			Approach(onComplete, target);
 		else
 			RandomWalk(onComplete);
