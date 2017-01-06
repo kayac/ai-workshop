@@ -52,14 +52,19 @@ public class CharacterAIRule : CharacterAIBase
 		var direction = destination - position;
 
 		Vector3 move;
-		if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y)) {
+		if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y))
 			move = (direction.x > 0 ? Vector3.left : Vector3.right);
-			if (IsWall(position + move))
-				move = (IsWall(position + Vector3.up) ? Vector3.down :  Vector3.up);
-		} else {
+		else
 			move = (direction.y > 0 ? Vector3.down : Vector3.up);
-			if (IsWall(position + move))
-				move = (IsWall(position + Vector3.left) ? Vector3.right :  Vector3.left);
+
+		for (var i = 0; i < 3; i++)
+		{
+			if (!IsWall(position + move))
+				break;
+			// rotate
+			var x = move.x;
+			move.x = move.y;
+			move.y = -x;
 		}
 
 		_character.MoveTo(position + move, onComplete);
