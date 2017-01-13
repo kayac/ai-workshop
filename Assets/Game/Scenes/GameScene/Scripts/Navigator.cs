@@ -29,7 +29,7 @@ public class Navigator
 
 	public Navigator(Const.MapCellType[,] map)
 	{
-		map = map;
+		this.map = map;
 	}
 
 	public Vector3[] FindPath(Vector3 origin, Vector3 dest)
@@ -48,6 +48,7 @@ public class Navigator
 			stacked_cost = 0,
 		};
 		start.predictive_cost = PredictCost(start, dest_node);
+		candidates.Add(start);
 
 		Predicate<Node> is_dest = (n) => (n.x == (int) dest.x && n.y == (int) dest.y);
 
