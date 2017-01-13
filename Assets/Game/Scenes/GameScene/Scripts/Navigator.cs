@@ -32,7 +32,7 @@ public class Navigator
 		map = map;
 	}
 
-	public void FindPath(Vector3 origin, Vector3 dest)
+	public Vector3[] FindPath(Vector3 origin, Vector3 dest)
 	{
 		var candidates = new List<Node>();
 
@@ -70,7 +70,7 @@ public class Navigator
 				if (!IsWalkable(next))
 					continue;
 				if (is_dest(next))
-					return /* pathを返す */;
+					return TracePath(next);
 
 				next.predictive_cost = PredictCost(next, dest_node);
 				candidates.Add(next);
@@ -79,6 +79,16 @@ public class Navigator
 		}
 
 		return null;
+	}
+
+	private Vector3[] TracePath(Node tail)
+	{
+		var path = new List<Vector3>();
+
+		for (var node = tail; node.prev != null; node = node.prev)
+			path.Add(new Vector3(node.x - node.prev.x, node.y - node.prev.y));
+
+		return path.ToArray();
 	}
 
 	private bool IsWalkable(Node point)
