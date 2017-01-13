@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
 
 	public Const.MapCellType[,] map { get; private set ; }
 
+	public Navigator navigator { get; private set; }
+
 	[SerializeField]
 	private Transform _cameraRoot;
 
