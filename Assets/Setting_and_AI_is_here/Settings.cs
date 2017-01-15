@@ -18,7 +18,7 @@ public static class Setting
 
 	public static readonly Type oppCharacterAIType = typeof(
 		// ここのクラスを変更すると敵チームのキャラのAIを設定できる
-		GameCharacterAIRandom
+		GameCharacterAIKamikaze
 	);
 
 	public static readonly Type foodGenerateLogicType = typeof(

@@ -31,12 +31,12 @@ public class GamePresetDesigned : GamePresetBase
 				/*
 				 01234567890123456789
 				*/
-				"2_111B11B1B1B1B1B1B2", // 9
-				"1_111B11B1BB1BB1BB1B", // 8
-				"1_111B11B11111111111", // 7
-				"1_111B11B11333333333", // 6
-				"w_wwwwwwwww333B3B333", // 5
-				"w2_1111111w333333332", // 4
+				"2_111_11_1_1_1_1_1_2", // 9
+				"1_111_11_1__1__1__1_", // 8
+				"1_111_11B11111111111", // 7
+				"1_111_11_11333333333", // 6
+				"w_wwwwwwwww333_3_333", // 5
+				"w2_111111Pw333333332", // 4
 				"wwwwwwwww1wwwwwwwwww", // 3
 				"1111_____1______1111", // 2
 				"1111_____1______1111", // 1
@@ -50,7 +50,7 @@ public class GamePresetDesigned : GamePresetBase
 				"rrrrrrrrr1rrrrrrrrrr", // 3
 				"rrrrrrrrr1rrrrrrrrrr", // 2
 				"rrrrrrrrr1rrrrrrrrrr", // 1
-				"rrrrrrrrrPrrrrrrrrrr", // 0
+				"rrrrrrrrr_rrrrrrrrrr", // 0
 				/*
 				 01234567890123456789
 				*/
