@@ -94,6 +94,7 @@ public class Navigator
 		for (var node = tail; node.prev != null; node = node.prev)
 			path.Add(node.position - node.prev.position);
 
+		path.Reverse();
 		return path.ToArray();
 	}
 
