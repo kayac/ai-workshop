@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class Navigator
 {
-	readonly int LoopLimit = 30;
-
 	public class Node
 	{
 		public Vector3 position;
@@ -20,6 +18,8 @@ public class Navigator
 		}
 	}
 
+	public int LoopLimit { get; set; }
+
 	Const.MapCellType[,] map;
 
 	public long GetId(Node node)
@@ -30,6 +30,7 @@ public class Navigator
 	public Navigator(Const.MapCellType[,] map)
 	{
 		this.map = map;
+		LoopLimit = 30;
 	}
 
 	public Vector3[] FindPath(Vector3 origin, Vector3 dest)
