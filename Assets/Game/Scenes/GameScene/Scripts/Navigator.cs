@@ -8,10 +8,9 @@ public class Navigator
 {
 	readonly int LoopLimit = 30;
 
-	class Node
+	public class Node
 	{
-		public int x, y;
-		public bool closed;
+		public Vector3 position;
 		public Node prev;
 		public float stacked_cost;
 		public float predictive_cost;
@@ -19,13 +18,14 @@ public class Navigator
 		{
 			get { return stacked_cost + predictive_cost; }
 		}
-		public override int GetHashCode()
-		{
-			return x.GetHashCode() ^ y.GetHashCode();
-		}
 	}
 
 	Const.MapCellType[,] map;
+
+	public long GetId(Node node)
+	{
+		return (int)node.position.x + map.GetLength(0) * (int)node.position.y;
+	}
 
 	public Navigator(Const.MapCellType[,] map)
 	{
@@ -34,49 +34,54 @@ public class Navigator
 
 	public Vector3[] FindPath(Vector3 origin, Vector3 dest)
 	{
-		var candidates = new List<Node>();
+		var open = new Dictionary<long, Node>();
+		var closed = new Dictionary<long, Node>();
 
 		var dest_node = new Node() {
-			x = (int) dest.x,
-			y = (int) dest.y,
+			position = dest,
 		};
 
 		var start = new Node() {
-			x = (int) origin.x,
-			y = (int) origin.y,
-			closed = false,
+			position = origin,
 			stacked_cost = 0,
 		};
 		start.predictive_cost = PredictCost(start, dest_node);
-		candidates.Add(start);
+		open.Add(GetId(start), start);
 
-		Predicate<Node> is_dest = (n) => (n.x == (int) dest.x && n.y == (int) dest.y);
+		Predicate<Node> is_dest = (n) => (GetId(n) == GetId(dest_node));
 
 		for (int i = 0; i < LoopLimit; i++)
 		{
-			var open = candidates.Where((n) => !n.closed);
 			if (open.Count() == 0)
 				return null;
 
-			var node = open.Aggregate((a, b) => (a.cost <= b.cost ? a : b));
+			var pair = open.Aggregate((a, b) => (a.Value.cost <= b.Value.cost ? a : b));
+			var node = pair.Value;
 			for (int j = 0; j < 4; j++)
 			{
+				Vector3 pos = node.position;
+				if (j == 0 || j == 2)
+					pos.x += j - 1;
+				if (j == 1 || j == 3)
+					pos.y += j - 2;
 				var next = new Node() {
-					x = node.x + (j == 0 || j == 2 ? j - 1 : 0),
-					y = node.y + (j == 1 || j == 3 ? j - 2 : 0),
-					closed = false,
+					position = pos,
 					prev = node,
 					stacked_cost = node.stacked_cost + 1,
 				};
+				var id = GetId(next);
+				if (open.ContainsKey(id) || closed.ContainsKey(id))
+					continue;
 				if (!IsWalkable(next))
 					continue;
 				if (is_dest(next))
 					return TracePath(next);
 
 				next.predictive_cost = PredictCost(next, dest_node);
-				candidates.Add(next);
+				open.Add(id, next);
 			}
-			node.closed = true;
+			open.Remove(pair.Key);
+			closed.Add(GetId(node), node);
 		}
 
 		return null;
@@ -87,20 +92,22 @@ public class Navigator
 		var path = new List<Vector3>();
 
 		for (var node = tail; node.prev != null; node = node.prev)
-			path.Add(new Vector3(node.x - node.prev.x, node.y - node.prev.y));
+			path.Add(node.position - node.prev.position);
 
 		return path.ToArray();
 	}
 
 	private bool IsWalkable(Node point)
 	{
-		if (point.x < 0 || point.y < 0 || point.x >= map.GetLength(0) || point.y >= map.GetLength(1))
+		var x = (int)point.position.x;
+		var y = (int)point.position.y;
+		if (x < 0 || y < 0 || x >= map.GetLength(0) || y >= map.GetLength(1))
 			return false;
-		return map[point.x, point.y] == Const.MapCellType.None;
+		return map[x, y] == Const.MapCellType.None;
 	}
 
 	private float PredictCost(Node current, Node dest)
 	{
-		return Math.Abs(current.x - dest.x) + Math.Abs(current.y - dest.y);
+		return Math.Abs(current.position.x - dest.position.x) + Math.Abs(current.position.y - dest.position.y);
 	}
 }
