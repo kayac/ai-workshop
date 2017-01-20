@@ -40,6 +40,7 @@ public class Navigator
 		var dest_node = new Node() {
 			position = dest,
 		};
+		var dest_id = GetId(dest_node);
 
 		var start = new Node() {
 			position = origin,
@@ -47,8 +48,6 @@ public class Navigator
 		};
 		start.predictive_cost = PredictCost(start, dest_node);
 		open.Add(GetId(start), start);
-
-		Predicate<Node> is_dest = (n) => (GetId(n) == GetId(dest_node));
 
 		for (int i = 0; i < LoopLimit; i++)
 		{
@@ -74,7 +73,7 @@ public class Navigator
 					continue;
 				if (!IsWalkable(next))
 					continue;
-				if (is_dest(next))
+				if (GetId(next) == dest_id)
 					return TracePath(next);
 
 				next.predictive_cost = PredictCost(next, dest_node);
