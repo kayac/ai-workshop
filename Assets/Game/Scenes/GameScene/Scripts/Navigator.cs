@@ -21,15 +21,19 @@ public class Navigator
 	}
 
 	Const.MapCellType[,] map;
+	int[] map_size;
 
 	public long GetId(Node node)
 	{
-		return (int)node.position.x + map.GetLength(0) * (int)node.position.y;
+		return (int)node.position.x + map_size[0] * (int)node.position.y;
 	}
 
 	public Navigator(Const.MapCellType[,] map)
 	{
 		this.map = map;
+		map_size = new int[map.Rank];
+		for (int i = 0; i < map.Rank; i++)
+			map_size[i] = map.GetLength(i);
 	}
 
 	public Vector3[] FindPath(Vector3 origin, Vector3 dest)
@@ -101,7 +105,7 @@ public class Navigator
 	{
 		var x = (int)point.position.x;
 		var y = (int)point.position.y;
-		if (x < 0 || y < 0 || x >= map.GetLength(0) || y >= map.GetLength(1))
+		if (x < 0 || y < 0 || x >= map_size[0] || y >= map_size[1])
 			return false;
 		return map[x, y] == Const.MapCellType.None;
 	}
