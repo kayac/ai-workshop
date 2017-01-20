@@ -58,7 +58,17 @@ public class Navigator
 			if (open.Count() == 0)
 				return null;
 
-			var pair = open.Aggregate((a, b) => (a.Value.cost <= b.Value.cost ? a : b));
+			KeyValuePair<long, Node> pair = open.First();
+			float min_cost = pair.Value.cost;
+			foreach (var p in open)
+			{
+				var cost = p.Value.cost;
+				if (cost < min_cost)
+				{
+					pair = p;
+					min_cost = cost;
+				}
+			}
 			var node = pair.Value;
 			for (int j = 0; j < 4; j++)
 			{
