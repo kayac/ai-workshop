@@ -25,7 +25,7 @@ public class Navigator
 
 	public long GetId(Node node)
 	{
-		return (int)node.position.x + map_size[0] * (int)node.position.y;
+		return Mathf.RoundToInt(node.position.x) + map_size[0] * Mathf.RoundToInt(node.position.y);
 	}
 
 	public Navigator(Const.MapCellType[,] map)
@@ -113,8 +113,8 @@ public class Navigator
 
 	private bool IsWalkable(Node point)
 	{
-		var x = (int)point.position.x;
-		var y = (int)point.position.y;
+		var x = Mathf.RoundToInt(point.position.x);
+		var y = Mathf.RoundToInt(point.position.y);
 		if (x < 0 || y < 0 || x >= map_size[0] || y >= map_size[1])
 			return false;
 		return map[x, y] == Const.MapCellType.None;
