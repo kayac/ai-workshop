@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
 
 	public Const.MapCellType[,] map { get; private set ; }
 
+	public Navigator navigator { get; private set; }
+
 	[SerializeField]
 	private Transform _cameraRoot;
 
@@ -262,6 +264,8 @@ public class GameManager : MonoBehaviour
 		var presetData = _preset.Generate(Setting.mapSizeX, Setting.mapSizeY);
 		InitMap(presetData);
 		InitPresetContents(presetData);
+
+		navigator = new Navigator(map);
 	}
 
 	/// <summary>
