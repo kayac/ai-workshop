@@ -21,15 +21,20 @@ public class Navigator
 	public int LoopLimit { get; set; }
 
 	Const.MapCellType[,] map;
+	int[] map_size;
 
 	public long GetId(Node node)
 	{
-		return (int)node.position.x + map.GetLength(0) * (int)node.position.y;
+		return Mathf.RoundToInt(node.position.x) + map_size[0] * Mathf.RoundToInt(node.position.y);
 	}
 
 	public Navigator(Const.MapCellType[,] map)
 	{
 		this.map = map;
+		map_size = new int[map.Rank];
+		for (int i = 0; i < map.Rank; i++)
+			map_size[i] = map.GetLength(i);
+
 		LoopLimit = 30;
 	}
 
@@ -41,6 +46,7 @@ public class Navigator
 		var dest_node = new Node() {
 			position = dest,
 		};
+		var dest_id = GetId(dest_node);
 
 		var start = new Node() {
 			position = origin,
@@ -49,15 +55,23 @@ public class Navigator
 		start.predictive_cost = PredictCost(start, dest_node);
 		open.Add(GetId(start), start);
 
-		Predicate<Node> is_dest = (n) => (GetId(n) == GetId(dest_node));
-
 		for (int i = 0; i < LoopLimit; i++)
 		{
 			Debug.Log("open " + open.Count() + "/" + closed.Count());
 			if (open.Count() == 0)
 				return null;
 
-			var pair = open.Aggregate((a, b) => (a.Value.cost <= b.Value.cost ? a : b));
+			KeyValuePair<long, Node> pair = open.First();
+			float min_cost = pair.Value.cost;
+			foreach (var p in open)
+			{
+				var cost = p.Value.cost;
+				if (cost < min_cost)
+				{
+					pair = p;
+					min_cost = cost;
+				}
+			}
 			var node = pair.Value;
 			Debug.Log("node " + (int)node.position.x + " " + (int)node.position.y);
 			for (int j = 0; j < 4; j++)
@@ -77,7 +91,7 @@ public class Navigator
 					continue;
 				if (!IsWalkable(next))
 					continue;
-				if (is_dest(next))
+				if (GetId(next) == dest_id)
 					return TracePath(next);
 
 				next.predictive_cost = PredictCost(next, dest_node);
@@ -103,9 +117,9 @@ public class Navigator
 
 	private bool IsWalkable(Node point)
 	{
-		var x = (int)point.position.x;
-		var y = (int)point.position.y;
-		if (x < 0 || y < 0 || x >= map.GetLength(0) || y >= map.GetLength(1))
+		var x = Mathf.RoundToInt(point.position.x);
+		var y = Mathf.RoundToInt(point.position.y);
+		if (x < 0 || y < 0 || x >= map_size[0] || y >= map_size[1])
 			return false;
 		return map[x, y] == Const.MapCellType.None;
 	}
