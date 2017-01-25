@@ -38,11 +38,7 @@ public class GameCharacterAIKamikaze : CharacterAIBase
 					while (!isComplete)
 						yield return new WaitForEndOfFrame();
 				}
-				else
-					Debug.Log("No Path");
 			}
-			else
-				Debug.Log("No Player");
 
 			yield return new WaitForSeconds(1);
 		}

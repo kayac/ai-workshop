@@ -57,7 +57,6 @@ public class Navigator
 
 		for (int i = 0; i < LoopLimit; i++)
 		{
-			Debug.Log("open " + open.Count() + "/" + closed.Count());
 			if (open.Count() == 0)
 				return null;
 
@@ -73,7 +72,6 @@ public class Navigator
 				}
 			}
 			var node = pair.Value;
-			Debug.Log("node " + (int)node.position.x + " " + (int)node.position.y);
 			for (int j = 0; j < 4; j++)
 			{
 				Vector3 pos = node.position;
