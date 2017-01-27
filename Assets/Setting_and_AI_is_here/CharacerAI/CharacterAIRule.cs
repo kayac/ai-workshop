@@ -32,15 +32,9 @@ public class CharacterAIRule : CharacterAIBase
 	private void Approach(Action onComplete, MonoBehaviour target)
 	{
 		var position = _character.transform.position;
-
 		var destination = target.transform.position;
-		var direction = destination - position;
 
-		if (Mathf.Abs(direction.x) >= Mathf.Abs(direction.y)) {
-			position += (direction.x > 0 ? Vector3.right : Vector3.left);
-		} else {
-			position += (direction.y > 0 ? Vector3.up : Vector3.down);
-		}
+		position += foundPath[0];
 
 		_character.MoveTo(position, onComplete);
 	}
@@ -95,6 +89,13 @@ public class CharacterAIRule : CharacterAIBase
 		_character.MoveTo(position, onComplete);
 	}
 
+	Vector3[] foundPath;
+	private bool IsReachable(MonoBehaviour target)
+	{
+		foundPath = GameManager.instance.navigator.FindPath(_character.transform.position, target.transform.position);
+		return foundPath != null;
+	}
+
 	private MonoBehaviour FindFood()
 	{
 		// レベルが上がっていれば食べない
@@ -141,9 +142,9 @@ public class CharacterAIRule : CharacterAIBase
 
 			if ((target = FindStrongerEnemy()) != null)
 				action = Avoid;
-			else if ((target = FindFood()) != null)
+			else if ((target = FindFood()) != null && IsReachable(target))
 				action = Approach;
-			else if ((target = FindEatableEnemy()) != null)
+			else if ((target = FindEatableEnemy()) != null && IsReachable(target))
 				action = Approach;
 			else
 				action = RandomWalk;
