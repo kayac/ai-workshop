@@ -628,6 +628,8 @@ public class Character : CarriedObject
 		int nextExp = _nextLevelData.exp;
 		if (nextExp <= this.exp)
 		{
+			GameManager.instance.countBlackboard.Update(this, _nextLevelData.level);
+
 			this.exp = 0;
 			_levelData = _nextLevelData;
 			_nextLevelData = Setting.characterLevels.Find(m => m.level > _levelData.level);

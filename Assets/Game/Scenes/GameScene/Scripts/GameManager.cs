@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// ゲームの進行をするシングルトンクラス
@@ -10,6 +11,8 @@ public class GameManager : MonoBehaviour
 
 	public Const.MapCellType[,] map { get; private set ; }
 
+	public CountBlackboard countBlackboard { get; private set; }
+	public RoleBlackboard roleBlackboard { get; private set; }
 	public Navigator navigator { get; private set; }
 
 	[SerializeField]
@@ -135,8 +138,14 @@ public class GameManager : MonoBehaviour
 		foods = new List<Food>();
 		eggs = new List<Egg>();
 
+		countBlackboard = new CountBlackboard();
+		roleBlackboard = new RoleBlackboard();
+		roleBlackboard.Roles[RoleName.Warrior] = new Role(Const.Side.Opp, 3, 0);
+		roleBlackboard.Roles[RoleName.Breeder] = new Role(Const.Side.Opp, 0, 0);
+		roleBlackboard.Roles[RoleName.Children] = new Role(Const.Side.Opp, 0, 0);
+
 		InitPreset();
-		
+
 		_mode= Const.Mode.Play;
 	}
 
@@ -150,6 +159,22 @@ public class GameManager : MonoBehaviour
 
 	void Update()
 	{
+		if (Time.frameCount % 100 == 0)
+		{
+			var count = countBlackboard.OppLevelDistibution.Values.Sum(n => n);
+			var power = countBlackboard.OppLevelDistibution.Sum(p => p.Key * p.Value);
+
+			float breederRate = 1.0f * (1 - Mathf.Min(1, count / 30.0f));
+			float warriorRate = 0.2f * Mathf.Min(1, count / 30.0f) + 0.6f * Mathf.Min(1, power / 100.0f);
+
+			var breeder = (uint) (count * breederRate);
+			var warrior = (uint) (count * (1 - breederRate) * warriorRate);
+			var children = (uint) (count - (warrior + breeder));
+			roleBlackboard.Roles[RoleName.Breeder].Update(breeder);
+			roleBlackboard.Roles[RoleName.Warrior].Update(warrior);
+			roleBlackboard.Roles[RoleName.Children].Update(children);
+		}
+
 		if (isGameOver)
 		{
 
@@ -432,6 +457,8 @@ public class GameManager : MonoBehaviour
 
 		list.Add(character);
 
+		countBlackboard.Add(character);
+
 		return character;
 	}
 
@@ -515,6 +542,8 @@ public class GameManager : MonoBehaviour
 
 		ownCharacters.Remove(character);
 		oppCharacters.Remove(character);
+
+		countBlackboard.Remove(character);
 
 		if (ownCharacters.Count == 0 || oppCharacters.Count == 0)
 		{
